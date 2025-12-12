@@ -20,7 +20,7 @@
 <button id="btn">Enviar</button>
 
 <script>
-  const ws = new WebSocket(`ws://${location.host}`);
+  const ws = new WebSocket(`wss://${location.host}`);
   const mensajes = document.getElementById("mensajes");
   const input = document.getElementById("input");
   const btn = document.getElementById("btn");
