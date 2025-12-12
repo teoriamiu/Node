@@ -159,6 +159,4 @@ const server = http.createServer((req, res) => {
   res.end('No encontrado');
 });
 
-server.listen(PORT, () => {
-      console.log(\`Servidor escuchando en http://localhost:\${PORT} — Ctrl+C para salir\`);
-});
+console.log("Servidor escuchando en http://localhost:" + PORT + " - Ctrl+C para salir");
