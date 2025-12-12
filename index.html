@@ -1,30 +1,45 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Mi App Node</title>
-<style>
-  body {
-    font-family: Arial;
-    margin: 30px;
-    text-align: center;
-  }
-  footer {
-    margin-top: 50px;
-    color: #555;
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>Chat en tiempo real</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    #mensajes { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; margin-bottom: 10px; }
+    #input { width: 80%; padding: 8px; }
+    #btn { padding: 8px; }
+  </style>
 </head>
 <body>
 
-<h1>Node.js funcionando ✔</h1>
-<p>Este HTML es servido por Express.</p>
+<h2>Chat en tiempo real</h2>
+
+<div id="mensajes"></div>
+
+<input id="input" placeholder="Escribí un mensaje..." />
+<button id="btn">Enviar</button>
 
 <script>
-  console.log("JavaScript del lado del cliente funcionando.");
+  const ws = new WebSocket(`ws://${location.host}`);
+  const mensajes = document.getElementById("mensajes");
+  const input = document.getElementById("input");
+  const btn = document.getElementById("btn");
+
+  ws.onmessage = (event) => {
+    const div = document.createElement("div");
+    div.textContent = event.data;
+    mensajes.appendChild(div);
+    mensajes.scrollTop = mensajes.scrollHeight;
+  };
+
+  btn.onclick = () => {
+    const texto = input.value.trim();
+    if (texto !== "") {
+      ws.send(texto);
+      input.value = "";
+    }
+  };
 </script>
 
-<footer>© Agustín Díaz</footer>
 </body>
 </html>
