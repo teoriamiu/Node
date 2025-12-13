@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
-  
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="theme-color" content="#075e54"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0c1317">
   
   <title>WhatsChat | Mensajería Simple y Rápida 💬</title>
   
@@ -14,181 +12,809 @@
   <meta name="author" content="Agustín Díaz">
   <meta name="robots" content="index, follow">
   
-  <link rel="canonical" href="https://whatschat-ix08.onrender.com/"> 
+  <link rel="canonical" href="https://whatschat-ix08.onrender.com/">
   
-  <link rel="icon" href="https://i.imgur.com/RtN3nkM.jpeg"> 
+  <link rel="icon" href="https://i.imgur.com/RtN3nkM.jpeg">
   
   <meta property="og:title" content="WhatsChat: La Mensajería que Conoces 🟢">
   <meta property="og:description" content="Una aplicación de chat rápida y privada con el diseño que ya amas. Envía mensajes, fotos y audios al instante.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://i.imgur.com/RtN3nkM.jpeg"> 
-  <meta property="og:url" content="https://whatschat-ix08.onrender.com/"> <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://i.imgur.com/RtN3nkM.jpeg">
+  <meta property="og:url" content="https://whatschat-ix08.onrender.com/">
+  
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="WhatsChat: Chatea Ya Mismo 👋">
   <meta name="twitter:description" content="Comunícate sin complicaciones. Disfruta de una experiencia de chat intuitiva y enfocada en lo que importa: tus conversaciones.">
-  <meta name="twitter:image" content="https://i.imgur.com/RtN3nkM.jpeg"> 
+  <meta name="twitter:image" content="https://i.imgur.com/RtN3nkM.jpeg">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
 
-<style>
-* { box-sizing: border-box; }
+    :root {
+      --whatsapp-green: #075e54;
+      --whatsapp-green-light: #128c7e;
+      --whatsapp-chat-bg: #0c1317;
+      --whatsapp-message-out: #005c4b;
+      --whatsapp-message-in: #202c33;
+      --whatsapp-panel-left: #111b21;
+      --whatsapp-panel-right: #0b141a;
+      --whatsapp-text-primary: #e9edef;
+      --whatsapp-text-secondary: #8696a0;
+      --whatsapp-border: #2f3b43;
+      --whatsapp-icon: #aebac1;
+      --whatsapp-hover: #2a3942;
+    }
 
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
-  background: #075e54;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-}
+    body {
+      background-color: var(--whatsapp-chat-bg);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-.app {
-  width: 100%;
-  max-width: 480px;
-  background: #efeae2;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
+    .app-container {
+      width: 100%;
+      height: 100vh;
+      max-width: 1400px;
+      background-color: var(--whatsapp-chat-bg);
+      display: flex;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    }
 
-@media (min-width: 768px) {
-  body {
-    background: #111b21;
-    align-items: center;
-  }
-  .app {
-    height: 90vh;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0,0,0,.4);
-  }
-}
+    /* Panel izquierdo - Contactos */
+    .left-panel {
+      width: 30%;
+      min-width: 300px;
+      max-width: 400px;
+      background-color: var(--whatsapp-panel-left);
+      border-right: 1px solid var(--whatsapp-border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
-.header {
-  background: #075e54;
-  color: #fff;
-  padding: 14px;
-  font-weight: 600;
-}
+    /* Header del panel izquierdo */
+    .user-header {
+      padding: 10px 16px;
+      background-color: var(--whatsapp-panel-left);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--whatsapp-border);
+    }
 
-.messages {
-  flex: 1;
-  padding: 12px;
-  overflow-y: auto;
-}
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
 
-.message {
-  max-width: 78%;
-  padding: 8px 10px 18px;
-  margin-bottom: 8px;
-  font-size: 14px;
-  border-radius: 8px;
-  position: relative;
-  word-wrap: break-word;
-}
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--whatsapp-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
 
-.message.me {
-  background: #dcf8c6;
-  margin-left: auto;
-  border-bottom-right-radius: 0;
-}
+    .user-name {
+      color: var(--whatsapp-text-primary);
+      font-size: 16px;
+      font-weight: 500;
+    }
 
-.message.other {
-  background: #fff;
-  margin-right: auto;
-  border-bottom-left-radius: 0;
-}
+    .header-icons {
+      display: flex;
+      gap: 25px;
+      color: var(--whatsapp-icon);
+    }
 
-.time {
-  position: absolute;
-  bottom: 4px;
-  right: 8px;
-  font-size: 11px;
-  color: #667781;
-}
+    .header-icons i {
+      font-size: 20px;
+      cursor: pointer;
+    }
 
-.input-bar {
-  display: flex;
-  padding: 10px;
-  background: #f0f2f5;
-}
+    /* Buscador */
+    .search-container {
+      padding: 10px 16px;
+      background-color: var(--whatsapp-panel-left);
+    }
 
-.input-bar input {
-  flex: 1;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 14px;
-  outline: none;
-}
+    .search-box {
+      background-color: var(--whatsapp-message-in);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+    }
 
-.input-bar button {
-  margin-left: 8px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  background: #075e54;
-  color: #fff;
-  font-size: 18px;
-}
-</style>
+    .search-box i {
+      color: var(--whatsapp-text-secondary);
+      margin-right: 10px;
+    }
+
+    .search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--whatsapp-text-primary);
+      width: 100%;
+      font-size: 14px;
+    }
+
+    /* Lista de chats */
+    .chats-list {
+      flex: 1;
+      overflow-y: auto;
+      background-color: var(--whatsapp-panel-left);
+    }
+
+    .chat-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(134, 150, 160, 0.1);
+      transition: background-color 0.2s;
+    }
+
+    .chat-item:hover {
+      background-color: var(--whatsapp-hover);
+    }
+
+    .chat-avatar {
+      width: 49px;
+      height: 49px;
+      border-radius: 50%;
+      background-color: var(--whatsapp-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      margin-right: 15px;
+    }
+
+    .chat-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chat-name-time {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .chat-name {
+      color: var(--whatsapp-text-primary);
+      font-size: 16px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-time {
+      color: var(--whatsapp-text-secondary);
+      font-size: 12px;
+    }
+
+    .chat-last-message {
+      display: flex;
+      align-items: center;
+      color: var(--whatsapp-text-secondary);
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-last-message i {
+      margin-right: 5px;
+      font-size: 12px;
+    }
+
+    /* Panel derecho - Chat */
+    .right-panel {
+      flex: 1;
+      background-color: var(--whatsapp-panel-right);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background-image: url("https://web.whatsapp.com/img/bg-chat-tile-light_686b98c9fdffef3f63127759e2057750.png");
+      background-repeat: repeat;
+    }
+
+    /* Encabezado del chat */
+    .chat-header {
+      padding: 10px 16px;
+      background-color: var(--whatsapp-panel-left);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--whatsapp-border);
+      z-index: 10;
+    }
+
+    .contact-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .contact-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--whatsapp-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .contact-details h3 {
+      color: var(--whatsapp-text-primary);
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .contact-details p {
+      color: var(--whatsapp-text-secondary);
+      font-size: 13px;
+    }
+
+    .chat-actions {
+      display: flex;
+      gap: 25px;
+      color: var(--whatsapp-icon);
+    }
+
+    .chat-actions i {
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* Área de mensajes */
+    .messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .messages-scroll {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Mensajes */
+    .message {
+      max-width: 65%;
+      padding: 6px 7px 8px 9px;
+      border-radius: 7.5px;
+      position: relative;
+      word-wrap: break-word;
+      box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+    }
+
+    .message.incoming {
+      background-color: var(--whatsapp-message-in);
+      align-self: flex-start;
+      border-top-left-radius: 0;
+    }
+
+    .message.outgoing {
+      background-color: var(--whatsapp-message-out);
+      align-self: flex-end;
+      border-top-right-radius: 0;
+    }
+
+    .message-text {
+      color: var(--whatsapp-text-primary);
+      font-size: 14.2px;
+      line-height: 19px;
+      padding-right: 30px;
+    }
+
+    .message-time {
+      position: absolute;
+      bottom: 6px;
+      right: 7px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .message-status {
+      font-size: 12px;
+      margin-left: 3px;
+    }
+
+    .message.outgoing .message-status {
+      color: #53bdeb;
+    }
+
+    /* Área de entrada */
+    .input-container {
+      background-color: var(--whatsapp-panel-left);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .input-icons {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: var(--whatsapp-icon);
+    }
+
+    .input-icons i {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .input-box {
+      flex: 1;
+      background-color: var(--whatsapp-message-in);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 9px 12px;
+    }
+
+    .input-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--whatsapp-text-primary);
+      width: 100%;
+      font-size: 15px;
+    }
+
+    .send-button {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--whatsapp-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .send-button:hover {
+      background-color: var(--whatsapp-green-light);
+    }
+
+    .send-button i {
+      font-size: 20px;
+      transform: rotate(45deg);
+      margin-left: 2px;
+    }
+
+    /* Estados de conexión */
+    .connection-status {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #1e2a30;
+      color: var(--whatsapp-text-primary);
+      padding: 8px 16px;
+      text-align: center;
+      font-size: 14px;
+      z-index: 100;
+      display: none;
+    }
+
+    .connection-status.connected {
+      background-color: rgba(32, 44, 51, 0.95);
+      display: block;
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #374045;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #47525a;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .left-panel {
+        width: 40%;
+        min-width: 280px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .app-container {
+        flex-direction: column;
+      }
+      
+      .left-panel {
+        width: 100%;
+        max-width: 100%;
+        height: 50%;
+      }
+      
+      .right-panel {
+        height: 50%;
+      }
+      
+      .connection-status {
+        font-size: 12px;
+        padding: 6px 12px;
+      }
+    }
+
+    /* Animación para nuevos mensajes */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message {
+      animation: fadeIn 0.2s ease-out;
+    }
+  </style>
 </head>
 
 <body>
-
-<div class="app">
-  <div class="header">WhatsChat</div>
-  <div id="mensajes" class="messages"></div>
-  <div class="input-bar">
-    <input id="input" placeholder="Escribí un mensaje…" autocomplete="off">
-    <button id="btn">➤</button>
+  <div class="connection-status" id="connectionStatus">
+    <i class="fas fa-wifi"></i> Conectado a WhatsChat
   </div>
-</div>
+  
+  <div class="app-container">
+    <!-- Panel izquierdo - Lista de contactos -->
+    <div class="left-panel">
+      <!-- Encabezado del usuario -->
+      <div class="user-header">
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">U</div>
+          <div class="user-name">Tú</div>
+        </div>
+        <div class="header-icons">
+          <i class="fas fa-users"></i>
+          <i class="fas fa-comment-alt"></i>
+          <i class="fas fa-ellipsis-v"></i>
+        </div>
+      </div>
+      
+      <!-- Buscador -->
+      <div class="search-container">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Buscar o empezar un chat nuevo">
+        </div>
+      </div>
+      
+      <!-- Lista de chats -->
+      <div class="chats-list" id="chatsList">
+        <!-- Los chats se generarán dinámicamente -->
+      </div>
+    </div>
+    
+    <!-- Panel derecho - Área de chat -->
+    <div class="right-panel">
+      <!-- Encabezado del chat -->
+      <div class="chat-header">
+        <div class="contact-info">
+          <div class="contact-avatar" id="contactAvatar">G</div>
+          <div class="contact-details">
+            <h3 id="contactName">Grupo WhatsChat</h3>
+            <p id="contactStatus">En línea</p>
+          </div>
+        </div>
+        <div class="chat-actions">
+          <i class="fas fa-search"></i>
+          <i class="fas fa-paperclip"></i>
+          <i class="fas fa-ellipsis-v"></i>
+        </div>
+      </div>
+      
+      <!-- Mensajes -->
+      <div class="messages-container" id="messagesContainer">
+        <div class="messages-scroll" id="messagesScroll">
+          <!-- Los mensajes se cargarán aquí -->
+          <div class="message incoming">
+            <div class="message-text">¡Bienvenido a WhatsChat! Envía un mensaje para comenzar a chatear.</div>
+            <div class="message-time">11:00</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Área de entrada de mensajes -->
+      <div class="input-container">
+        <div class="input-icons">
+          <i class="far fa-smile"></i>
+          <i class="fas fa-paperclip"></i>
+        </div>
+        <div class="input-box">
+          <input type="text" id="messageInput" placeholder="Escribe un mensaje aquí" autocomplete="off">
+        </div>
+        <div class="send-button" id="sendButton">
+          <i class="fas fa-paper-plane"></i>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<!-- Socket.IO -->
-<script src="/socket.io/socket.io.js"></script>
-
-<script>
-const socket = io();
-
-const mensajes = document.getElementById("mensajes");
-const input = document.getElementById("input");
-const btn = document.getElementById("btn");
-
-socket.on("message", data => {
-  render(data.text, data.me, data.time);
-});
-
-btn.onclick = send;
-input.addEventListener("keydown", e => {
-  if (e.key === "Enter") send();
-});
-
-function send() {
-  const text = input.value.trim();
-  if (!text) return;
-
-  socket.emit("message", { text });
-  input.value = "";
-}
-
-function render(text, me, time) {
-  const div = document.createElement("div");
-  div.className = `message ${me ? "me" : "other"}`;
-
-  const msg = document.createElement("div");
-  msg.textContent = text;
-
-  const t = document.createElement("div");
-  t.className = "time";
-  t.textContent = new Date(time).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-
-  div.appendChild(msg);
-  div.appendChild(t);
-  mensajes.appendChild(div);
-  mensajes.scrollTop = mensajes.scrollHeight;
-}
-</script>
-
+  <!-- Socket.IO -->
+  <script src="/socket.io/socket.io.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Elementos DOM
+      const connectionStatus = document.getElementById('connectionStatus');
+      const messagesContainer = document.getElementById('messagesContainer');
+      const messagesScroll = document.getElementById('messagesScroll');
+      const messageInput = document.getElementById('messageInput');
+      const sendButton = document.getElementById('sendButton');
+      const chatsList = document.getElementById('chatsList');
+      const searchInput = document.getElementById('searchInput');
+      
+      // Conexión Socket.IO
+      const socket = io();
+      
+      // Estado de conexión
+      socket.on('connect', function() {
+        console.log('Conectado al servidor');
+        connectionStatus.classList.add('connected');
+        setTimeout(() => {
+          connectionStatus.style.display = 'none';
+        }, 3000);
+      });
+      
+      socket.on('disconnect', function() {
+        console.log('Desconectado del servidor');
+        connectionStatus.textContent = 'Reconectando...';
+        connectionStatus.classList.add('connected');
+        connectionStatus.style.display = 'block';
+      });
+      
+      // Manejar mensajes entrantes
+      socket.on('message', function(data) {
+        // Crear elemento de mensaje
+        const messageElement = document.createElement('div');
+        messageElement.className = `message ${data.me ? 'outgoing' : 'incoming'}`;
+        
+        // Añadir contenido del mensaje
+        const messageText = document.createElement('div');
+        messageText.className = 'message-text';
+        messageText.textContent = data.text;
+        
+        // Añadir hora del mensaje
+        const messageTime = document.createElement('div');
+        messageTime.className = 'message-time';
+        
+        const time = new Date(data.time);
+        const timeString = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        messageTime.innerHTML = `${timeString} ${data.me ? '<i class="fas fa-check message-status"></i>' : ''}`;
+        
+        // Ensamblar mensaje
+        messageElement.appendChild(messageText);
+        messageElement.appendChild(messageTime);
+        
+        // Añadir al contenedor
+        messagesScroll.appendChild(messageElement);
+        
+        // Actualizar último mensaje en lista de chats
+        updateLastMessage(data.text, timeString);
+        
+        // Scroll automático al último mensaje
+        scrollToBottom();
+        
+        // Reproducir sonido de notificación para mensajes entrantes
+        if (!data.me) {
+          playNotificationSound();
+        }
+      });
+      
+      // Enviar mensaje
+      function sendMessage() {
+        const text = messageInput.value.trim();
+        if (!text) return;
+        
+        // Enviar al servidor
+        socket.emit('message', { text });
+        
+        // Limpiar input
+        messageInput.value = '';
+        messageInput.focus();
+      }
+      
+      // Event listeners
+      sendButton.addEventListener('click', sendMessage);
+      
+      messageInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+      
+      // Scroll al fondo del chat
+      function scrollToBottom() {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+      
+      // Sonido de notificación
+      function playNotificationSound() {
+        try {
+          const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3');
+          audio.volume = 0.3;
+          audio.play();
+        } catch (e) {
+          console.log('No se pudo reproducir el sonido de notificación');
+        }
+      }
+      
+      // Actualizar último mensaje en lista de chats
+      function updateLastMessage(text, time) {
+        const chatItems = document.querySelectorAll('.chat-item');
+        if (chatItems.length > 0) {
+          const lastMessage = chatItems[0].querySelector('.chat-last-message');
+          const lastTime = chatItems[0].querySelector('.chat-time');
+          
+          if (lastMessage) {
+            lastMessage.innerHTML = `<i class="fas fa-check"></i> ${text.substring(0, 30)}${text.length > 30 ? '...' : ''}`;
+          }
+          
+          if (lastTime) {
+            lastTime.textContent = time;
+          }
+        }
+      }
+      
+      // Generar lista de chats simulada
+      function generateChatList() {
+        const chats = [
+          { id: 1, name: 'Grupo WhatsChat', lastMessage: '¡Bienvenido a WhatsChat!', time: '11:00', unread: 0, avatarText: 'G' },
+          { id: 2, name: 'Familia', lastMessage: 'Nos vemos en la cena', time: 'Ayer', unread: 2, avatarText: 'F' },
+          { id: 3, name: 'María García', lastMessage: '¿Recibiste mi correo?', time: '09:45', unread: 0, avatarText: 'M' },
+          { id: 4, name: 'Juan Pérez', lastMessage: '¡El partido fue increíble!', time: 'Ayer', unread: 0, avatarText: 'J' },
+          { id: 5, name: 'Trabajo', lastMessage: 'Reunión a las 15:00', time: 'Lun', unread: 5, avatarText: 'T' }
+        ];
+        
+        chatsList.innerHTML = '';
+        
+        chats.forEach(chat => {
+          const chatItem = document.createElement('div');
+          chatItem.className = 'chat-item';
+          
+          chatItem.innerHTML = `
+            <div class="chat-avatar" style="background-color: ${getAvatarColor(chat.name)}">${chat.avatarText}</div>
+            <div class="chat-info">
+              <div class="chat-name-time">
+                <div class="chat-name">${chat.name}</div>
+                <div class="chat-time">${chat.time}</div>
+              </div>
+              <div class="chat-last-message">
+                ${chat.unread > 0 ? '<i class="fas fa-check-double" style="color:#53bdeb"></i>' : '<i class="fas fa-check"></i>'}
+                ${chat.lastMessage}
+              </div>
+            </div>
+          `;
+          
+          chatItem.addEventListener('click', function() {
+            // Actualizar información del contacto en el header
+            document.getElementById('contactName').textContent = chat.name;
+            document.getElementById('contactAvatar').textContent = chat.avatarText;
+            document.getElementById('contactAvatar').style.backgroundColor = getAvatarColor(chat.name);
+            
+            // Marcar como leído
+            chat.unread = 0;
+            this.querySelector('.chat-last-message i').style.color = '#8696a0';
+          });
+          
+          chatsList.appendChild(chatItem);
+        });
+      }
+      
+      // Color para avatar basado en el nombre
+      function getAvatarColor(name) {
+        const colors = [
+          '#075e54', '#128c7e', '#25d366', '#dcf8c6',
+          '#34b7f1', '#ece5dd', '#ff7e30', '#e74c3c',
+          '#8e44ad', '#2c3e50'
+        ];
+        
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+          hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        
+        return colors[Math.abs(hash) % colors.length];
+      }
+      
+      // Inicializar
+      function init() {
+        // Generar lista de chats
+        generateChatList();
+        
+        // Configurar color de avatar del usuario
+        const userAvatar = document.getElementById('userAvatar');
+        userAvatar.style.backgroundColor = getAvatarColor('Tú');
+        
+        // Configurar color de avatar del contacto
+        const contactAvatar = document.getElementById('contactAvatar');
+        contactAvatar.style.backgroundColor = getAvatarColor('Grupo WhatsChat');
+        
+        // Configurar búsqueda
+        searchInput.addEventListener('input', function() {
+          const searchTerm = this.value.toLowerCase();
+          const chatItems = document.querySelectorAll('.chat-item');
+          
+          chatItems.forEach(item => {
+            const chatName = item.querySelector('.chat-name').textContent.toLowerCase();
+            if (chatName.includes(searchTerm)) {
+              item.style.display = 'flex';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+        
+        // Enfocar en el input de mensaje al cargar
+        messageInput.focus();
+        
+        // Scroll al fondo del chat
+        setTimeout(scrollToBottom, 100);
+      }
+      
+      // Inicializar la aplicación
+      init();
+    });
+  </script>
 </body>
 </html>
