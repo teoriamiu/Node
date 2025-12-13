@@ -1,68 +1,158 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Chat en tiempo real</title>
-  <style>
-    body { font-family: Arial; padding: 20px; }
-    #mensajes {
-      border: 1px solid #ccc;
-      padding: 10px;
-      height: 300px;
-      overflow-y: auto;
-      margin-bottom: 10px;
-    }
-    #input { width: 80%; padding: 8px; }
-    #btn { padding: 8px; }
-  </style>
+<meta charset="UTF-8">
+<title>WhatsChat</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #ece5dd;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+}
+
+.chat-container {
+  width: 100%;
+  max-width: 420px;
+  background: #efeae2;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
+
+.chat-header {
+  background: #075e54;
+  color: white;
+  padding: 15px;
+  font-weight: bold;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.message {
+  max-width: 75%;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  word-wrap: break-word;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+
+.message.me {
+  background: #dcf8c6;
+  margin-left: auto;
+  border-bottom-right-radius: 0;
+}
+
+.message.other {
+  background: white;
+  margin-right: auto;
+  border-bottom-left-radius: 0;
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  background: #f0f0f0;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+.chat-input button {
+  margin-left: 8px;
+  padding: 10px 16px;
+  border-radius: 50%;
+  border: none;
+  background: #075e54;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.chat-input button:hover {
+  background: #0b7a66;
+}
+</style>
 </head>
+
 <body>
 
-<h2>Chat en tiempo real</h2>
+<div class="chat-container">
+  <div class="chat-header">WhatsChat</div>
 
-<div id="mensajes"></div>
+  <div id="mensajes" class="chat-messages"></div>
 
-<input id="input" placeholder="Escribí un mensaje..." />
-<button id="btn">Enviar</button>
+  <div class="chat-input">
+    <input id="input" placeholder="Escribí un mensaje…" />
+    <button id="btn">➤</button>
+  </div>
+</div>
 
 <script>
-  const protocol = location.protocol === "https:" ? "wss" : "ws";
-  const ws = new WebSocket(`${protocol}://${location.host}`);
+const protocol = location.protocol === "https:" ? "wss" : "ws";
+const ws = new WebSocket(`${protocol}://${location.host}`);
 
-  const mensajes = document.getElementById("mensajes");
-  const input = document.getElementById("input");
-  const btn = document.getElementById("btn");
+const mensajes = document.getElementById("mensajes");
+const input = document.getElementById("input");
+const btn = document.getElementById("btn");
 
-  ws.onopen = () => {
-    console.log("✅ WebSocket conectado");
-  };
+// ID local para distinguir tus mensajes
+const myId = Math.random().toString(36).slice(2);
+let lastSent = null;
 
-  ws.onerror = (e) => {
-    console.error("❌ WebSocket error", e);
-  };
+ws.onmessage = async (event) => {
+  const text = typeof event.data === "string"
+    ? event.data
+    : await event.data.text();
 
-  ws.onclose = () => {
-    console.log("🔌 WebSocket cerrado");
-  };
+  // Evita duplicar el mensaje propio
+  if (text === lastSent) return;
 
-  ws.onmessage = async (event) => {
-    const text = typeof event.data === "string"
-      ? event.data
-      : await event.data.text();
+  renderMessage(text, "other");
+};
 
-    const div = document.createElement("div");
-    div.textContent = text;
-    mensajes.appendChild(div);
-    mensajes.scrollTop = mensajes.scrollHeight;
-  };
+function renderMessage(text, type) {
+  const div = document.createElement("div");
+  div.className = `message ${type}`;
+  div.textContent = text;
+  mensajes.appendChild(div);
+  mensajes.scrollTop = mensajes.scrollHeight;
+}
 
-  btn.onclick = () => {
-    const texto = input.value.trim();
-    if (texto !== "") {
-      ws.send(texto);
-      input.value = "";
-    }
-  };
+btn.onclick = send;
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter") send();
+});
+
+function send() {
+  const texto = input.value.trim();
+  if (!texto) return;
+
+  lastSent = texto;
+  renderMessage(texto, "me");
+  ws.send(texto);
+  input.value = "";
+}
 </script>
 
 </body>
