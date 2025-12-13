@@ -1,88 +1,46 @@
 const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
 const path = require("path");
+const http = require("http");
+const WebSocket = require("ws");
 
 const app = express();
-const server = http.createServer(app);
+const PORT = process.env.PORT || 3000;
 
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
-});
-
-let users = [];
-let messages = [];
-let typingUsers = new Set();
-
+// Servir archivos estáticos
 app.use(express.static(__dirname));
 
-app.get("/", (_, res) => {
+// Página principal
+app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.get("/health", (_, res) => {
-  res.json({ status: "ok" });
-});
+// Crear servidor HTTP (necesario para WebSockets)
+const server = http.createServer(app);
 
-io.on("connection", socket => {
-  console.log("🔗 Conectado:", socket.id);
+// Crear WebSocket Server
+const wss = new WebSocket.Server({ server });
+
+// Manejo de conexiones
+wss.on("connection", (ws) => {
+  console.log("Usuario conectado");
   
-  socket.on("user_join", username => {
-    const user = {
-      id: socket.id,
-      username,
-      online: true,
-      lastSeen: new Date()
-    };
+  ws.on("message", (msg) => {
+    console.log("Mensaje recibido:", msg);
     
-    users = users.filter(u => u.username !== username);
-    users.push(user);
-    
-    socket.emit("join_success");
-    socket.emit("message_history", messages);
-    
-    io.emit("system_message", {
-      message: `${username} se unió`
+    // reenviar mensaje a todos los clientes
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(msg);
+      }
     });
   });
   
-  socket.on("send_message", data => {
-    const msg = {
-      username: data.username,
-      text: data.text,
-      timestamp: new Date()
-    };
-    
-    messages.push(msg);
-    messages = messages.slice(-500);
-    
-    io.emit("new_message", msg);
-  });
-  
-  socket.on("typing", username => {
-    typingUsers.add(username);
-    socket.broadcast.emit("user_typing", [...typingUsers]);
-  });
-  
-  socket.on("stop_typing", username => {
-    typingUsers.delete(username);
-    socket.broadcast.emit("user_typing", [...typingUsers]);
-  });
-  
-  socket.on("disconnect", () => {
-    const user = users.find(u => u.id === socket.id);
-    if (user) {
-      users = users.filter(u => u.id !== socket.id);
-      typingUsers.delete(user.username);
-      io.emit("user_typing", [...typingUsers]);
-    }
+  ws.on("close", () => {
+    console.log("Usuario desconectado");
   });
 });
 
-const PORT = process.env.PORT || 10000;
-server.listen(PORT, "0.0.0.0", () => {
-  console.log("🚀 WhatsChat en puerto", PORT);
+// Iniciar servidor
+server.listen(PORT, () => {
+  console.log("Servidor escuchando en puerto " + PORT);
 });

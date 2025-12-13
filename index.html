@@ -1,102 +1,34 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WhatsChat</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- TODO TU CSS ORIGINAL SIN CAMBIOS -->
-</head>
-
-<body>
-<div class="modal-overlay" id="loginModal">
-  <div class="modal-content">
-    <h2>WhatsChat</h2>
-    <input id="username-input" placeholder="Tu nombre">
-    <button id="join-chat-btn">Unirse</button>
-  </div>
-</div>
-
-<div class="app-container" id="appContainer" style="display:none">
-  <!-- TODO TU HTML ORIGINAL SIN CAMBIOS -->
-</div>
-
-<script src="/socket.io/socket.io.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  const socket = io({
-    transports: ["websocket"],
-    upgrade: false
-  });
-
-  let username = "";
-
-  const loginModal = document.getElementById("loginModal");
-  const appContainer = document.getElementById("appContainer");
-  const usernameInput = document.getElementById("username-input");
-  const joinBtn = document.getElementById("join-chat-btn");
-  const messageInput = document.getElementById("message-input");
-  const sendBtn = document.getElementById("send-button");
-  const messagesContainer = document.getElementById("messages-container");
-  const typingIndicator = document.getElementById("typing-indicator");
-
-  joinBtn.onclick = joinChat;
-  sendBtn.onclick = sendMessage;
-
-  socket.on("connect", () => {
-    console.log("✅ Socket conectado");
-  });
-
-  socket.on("join_success", () => {
-    loginModal.style.display = "none";
-    appContainer.style.display = "flex";
-    messageInput.disabled = false;
-    sendBtn.disabled = false;
-  });
-
-  socket.on("new_message", addMessage);
-  socket.on("message_history", msgs => {
-    messagesContainer.innerHTML = "";
-    msgs.forEach(addMessage);
-  });
-
-  socket.on("user_typing", users => {
-    const others = users.filter(u => u !== username);
-    typingIndicator.textContent = others.length
-      ? `${others[0]} está escribiendo...`
-      : "";
-  });
-
-  function joinChat() {
-    const name = usernameInput.value.trim();
-    if (!name) return alert("Ingresá un nombre");
-    if (!socket.connected) return alert("Conectando… intentá de nuevo");
-
-    username = name;
-    socket.emit("user_join", name);
-  }
-
-  function sendMessage() {
-    const text = messageInput.value.trim();
-    if (!text) return;
-
-    socket.emit("send_message", {
-      username,
-      text
-    });
-    messageInput.value = "";
-  }
-
-  function addMessage(msg) {
-    const div = document.createElement("div");
-    div.className = "message";
-    div.textContent = `${msg.username}: ${msg.text}`;
-    messagesContainer.appendChild(div);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  }
-
-});
-</script>
-</body>
+<!DOCTYPE html>  <html lang="es">  
+<head>  
+  <meta charset="UTF-8">  
+  <title>Chat en tiempo real</title>  
+  <style>  
+    body { font-family: Arial; padding: 20px; }  
+    #mensajes { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; margin-bottom: 10px; }  
+    #input { width: 80%; padding: 8px; }  
+    #btn { padding: 8px; }  
+  </style>  
+</head>  
+<body>  <h2>Chat en tiempo real</h2>  <div id="mensajes"></div>  <input id="input" placeholder="Escribí un mensaje..." />  
+<button id="btn">Enviar</button>  <script>  
+  const ws = new WebSocket(`ws://${location.host}`);  
+  const mensajes = document.getElementById("mensajes");  
+  const input = document.getElementById("input");  
+  const btn = document.getElementById("btn");  
+  
+  ws.onmessage = (event) => {  
+    const div = document.createElement("div");  
+    div.textContent = event.data;  
+    mensajes.appendChild(div);  
+    mensajes.scrollTop = mensajes.scrollHeight;  
+  };  
+  
+  btn.onclick = () => {  
+    const texto = input.value.trim();  
+    if (texto !== "") {  
+      ws.send(texto);  
+      input.value = "";  
+    }  
+  };  
+</script>  </body>  
 </html>
