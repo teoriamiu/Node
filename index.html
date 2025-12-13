@@ -43,8 +43,7 @@
       --whatsapp-chat-bg: #0c1317;
       --whatsapp-message-out: #005c4b;
       --whatsapp-message-in: #202c33;
-      --whatsapp-panel-left: #111b21;
-      --whatsapp-panel-right: #0b141a;
+      --whatsapp-panel: #111b21;
       --whatsapp-text-primary: #e9edef;
       --whatsapp-text-secondary: #8696a0;
       --whatsapp-border: #2f3b43;
@@ -64,206 +63,45 @@
     .app-container {
       width: 100%;
       height: 100vh;
-      max-width: 1400px;
+      max-width: 900px;
       background-color: var(--whatsapp-chat-bg);
       display: flex;
+      flex-direction: column;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Panel izquierdo - Contactos */
-    .left-panel {
-      width: 30%;
-      min-width: 300px;
-      max-width: 400px;
-      background-color: var(--whatsapp-panel-left);
-      border-right: 1px solid var(--whatsapp-border);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    /* Header del panel izquierdo */
-    .user-header {
-      padding: 10px 16px;
-      background-color: var(--whatsapp-panel-left);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--whatsapp-border);
-    }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: var(--whatsapp-green);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    .user-name {
-      color: var(--whatsapp-text-primary);
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .header-icons {
-      display: flex;
-      gap: 25px;
-      color: var(--whatsapp-icon);
-    }
-
-    .header-icons i {
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    /* Buscador */
-    .search-container {
-      padding: 10px 16px;
-      background-color: var(--whatsapp-panel-left);
-    }
-
-    .search-box {
-      background-color: var(--whatsapp-message-in);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      padding: 8px 16px;
-    }
-
-    .search-box i {
-      color: var(--whatsapp-text-secondary);
-      margin-right: 10px;
-    }
-
-    .search-box input {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--whatsapp-text-primary);
-      width: 100%;
-      font-size: 14px;
-    }
-
-    /* Lista de chats */
-    .chats-list {
-      flex: 1;
-      overflow-y: auto;
-      background-color: var(--whatsapp-panel-left);
-    }
-
-    .chat-item {
-      display: flex;
-      align-items: center;
-      padding: 12px 16px;
-      cursor: pointer;
-      border-bottom: 1px solid rgba(134, 150, 160, 0.1);
-      transition: background-color 0.2s;
-    }
-
-    .chat-item:hover {
-      background-color: var(--whatsapp-hover);
-    }
-
-    .chat-avatar {
-      width: 49px;
-      height: 49px;
-      border-radius: 50%;
-      background-color: var(--whatsapp-green);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-      font-size: 18px;
-      margin-right: 15px;
-    }
-
-    .chat-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .chat-name-time {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 4px;
-    }
-
-    .chat-name {
-      color: var(--whatsapp-text-primary);
-      font-size: 16px;
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .chat-time {
-      color: var(--whatsapp-text-secondary);
-      font-size: 12px;
-    }
-
-    .chat-last-message {
-      display: flex;
-      align-items: center;
-      color: var(--whatsapp-text-secondary);
-      font-size: 14px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .chat-last-message i {
-      margin-right: 5px;
-      font-size: 12px;
-    }
-
-    /* Panel derecho - Chat */
-    .right-panel {
-      flex: 1;
-      background-color: var(--whatsapp-panel-right);
-      display: flex;
-      flex-direction: column;
       position: relative;
-      background-image: url("https://web.whatsapp.com/img/bg-chat-tile-light_686b98c9fdffef3f63127759e2057750.png");
-      background-repeat: repeat;
     }
 
-    /* Encabezado del chat */
+    @media (min-width: 768px) {
+      .app-container {
+        height: 95vh;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+    }
+
+    /* Encabezado */
     .chat-header {
       padding: 10px 16px;
-      background-color: var(--whatsapp-panel-left);
+      background-color: var(--whatsapp-panel);
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid var(--whatsapp-border);
+      flex-shrink: 0;
       z-index: 10;
     }
 
-    .contact-info {
+    .header-left {
       display: flex;
       align-items: center;
       gap: 15px;
     }
 
-    .contact-avatar {
+    .chat-avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-color: var(--whatsapp-green);
+      background: linear-gradient(135deg, #075e54, #128c7e);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -272,44 +110,62 @@
       font-size: 18px;
     }
 
-    .contact-details h3 {
+    .chat-info h3 {
       color: var(--whatsapp-text-primary);
       font-size: 16px;
       font-weight: 500;
       margin-bottom: 2px;
     }
 
-    .contact-details p {
+    .chat-info p {
       color: var(--whatsapp-text-secondary);
       font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
-    .chat-actions {
+    .online-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #00a884;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .header-right {
       display: flex;
       gap: 25px;
       color: var(--whatsapp-icon);
     }
 
-    .chat-actions i {
+    .header-right i {
       font-size: 20px;
       cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .header-right i:hover {
+      color: #d1d7db;
     }
 
     /* Área de mensajes */
     .messages-container {
       flex: 1;
       overflow-y: auto;
-      padding: 20px;
+      padding: 20px 16px;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23111b21' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background-color: var(--whatsapp-chat-bg);
       display: flex;
       flex-direction: column;
-      position: relative;
     }
 
-    .messages-scroll {
+    .messages-wrapper {
       margin-top: auto;
       display: flex;
       flex-direction: column;
       gap: 8px;
+      min-height: min-content;
     }
 
     /* Mensajes */
@@ -320,6 +176,7 @@
       position: relative;
       word-wrap: break-word;
       box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+      animation: fadeIn 0.2s ease-out;
     }
 
     .message.incoming {
@@ -339,6 +196,8 @@
       font-size: 14.2px;
       line-height: 19px;
       padding-right: 30px;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .message-time {
@@ -361,26 +220,65 @@
       color: #53bdeb;
     }
 
+    /* Indicador de que alguien está escribiendo */
+    .typing-indicator {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background-color: var(--whatsapp-message-in);
+      border-radius: 7.5px;
+      align-self: flex-start;
+      margin-bottom: 8px;
+      width: fit-content;
+    }
+
+    .typing-indicator.active {
+      display: flex;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 3px;
+    }
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background-color: #8696a0;
+      border-radius: 50%;
+      animation: typingBounce 1.4s infinite ease-in-out both;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
     /* Área de entrada */
     .input-container {
-      background-color: var(--whatsapp-panel-left);
+      background-color: var(--whatsapp-panel);
       padding: 10px 16px;
       display: flex;
       align-items: center;
       gap: 10px;
-      z-index: 10;
+      flex-shrink: 0;
+      border-top: 1px solid var(--whatsapp-border);
     }
 
-    .input-icons {
+    .input-left {
       display: flex;
       align-items: center;
       gap: 15px;
       color: var(--whatsapp-icon);
     }
 
-    .input-icons i {
+    .input-left i {
       font-size: 24px;
       cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .input-left i:hover {
+      color: #d1d7db;
     }
 
     .input-box {
@@ -390,6 +288,11 @@
       display: flex;
       align-items: center;
       padding: 9px 12px;
+      transition: background-color 0.2s;
+    }
+
+    .input-box:focus-within {
+      background-color: #2a3942;
     }
 
     .input-box input {
@@ -399,6 +302,10 @@
       color: var(--whatsapp-text-primary);
       width: 100%;
       font-size: 15px;
+    }
+
+    .input-box input::placeholder {
+      color: #8696a0;
     }
 
     .send-button {
@@ -412,6 +319,7 @@
       color: white;
       cursor: pointer;
       transition: background-color 0.2s;
+      flex-shrink: 0;
     }
 
     .send-button:hover {
@@ -422,26 +330,6 @@
       font-size: 20px;
       transform: rotate(45deg);
       margin-left: 2px;
-    }
-
-    /* Estados de conexión */
-    .connection-status {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      background-color: #1e2a30;
-      color: var(--whatsapp-text-primary);
-      padding: 8px 16px;
-      text-align: center;
-      font-size: 14px;
-      z-index: 100;
-      display: none;
-    }
-
-    .connection-status.connected {
-      background-color: rgba(32, 44, 51, 0.95);
-      display: block;
     }
 
     /* Scrollbar personalizada */
@@ -462,36 +350,7 @@
       background: #47525a;
     }
 
-    /* Responsive */
-    @media (max-width: 900px) {
-      .left-panel {
-        width: 40%;
-        min-width: 280px;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .app-container {
-        flex-direction: column;
-      }
-      
-      .left-panel {
-        width: 100%;
-        max-width: 100%;
-        height: 50%;
-      }
-      
-      .right-panel {
-        height: 50%;
-      }
-      
-      .connection-status {
-        font-size: 12px;
-        padding: 6px 12px;
-      }
-    }
-
-    /* Animación para nuevos mensajes */
+    /* Animaciones */
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -503,8 +362,67 @@
       }
     }
 
-    .message {
-      animation: fadeIn 0.2s ease-out;
+    @keyframes typingBounce {
+      0%, 80%, 100% { 
+        transform: scale(0);
+        opacity: 0.5;
+      }
+      40% { 
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Estado de conexión */
+    .connection-status {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #1e2a30;
+      color: var(--whatsapp-text-primary);
+      padding: 8px 16px;
+      text-align: center;
+      font-size: 14px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      display: none;
+    }
+
+    .connection-status.connected {
+      background-color: rgba(32, 44, 51, 0.95);
+      display: flex;
+    }
+
+    /* Mensaje de bienvenida */
+    .welcome-message {
+      text-align: center;
+      padding: 20px;
+      color: var(--whatsapp-text-secondary);
+      font-size: 14px;
+      margin-top: 20px;
+    }
+
+    /* Notificación de nuevo mensaje */
+    .new-message-notification {
+      position: absolute;
+      bottom: 80px;
+      right: 20px;
+      background-color: var(--whatsapp-message-out);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      z-index: 5;
+      display: none;
     }
   </style>
 </head>
@@ -515,76 +433,61 @@
   </div>
   
   <div class="app-container">
-    <!-- Panel izquierdo - Lista de contactos -->
-    <div class="left-panel">
-      <!-- Encabezado del usuario -->
-      <div class="user-header">
-        <div class="user-info">
-          <div class="user-avatar" id="userAvatar">U</div>
-          <div class="user-name">Tú</div>
+    <!-- Encabezado del chat -->
+    <div class="chat-header">
+      <div class="header-left">
+        <div class="chat-avatar">
+          <i class="fas fa-comments"></i>
         </div>
-        <div class="header-icons">
-          <i class="fas fa-users"></i>
-          <i class="fas fa-comment-alt"></i>
-          <i class="fas fa-ellipsis-v"></i>
+        <div class="chat-info">
+          <h3>WhatsChat</h3>
+          <p><span class="online-dot"></span> En línea • Chat grupal</p>
         </div>
       </div>
-      
-      <!-- Buscador -->
-      <div class="search-container">
-        <div class="search-box">
-          <i class="fas fa-search"></i>
-          <input type="text" id="searchInput" placeholder="Buscar o empezar un chat nuevo">
-        </div>
-      </div>
-      
-      <!-- Lista de chats -->
-      <div class="chats-list" id="chatsList">
-        <!-- Los chats se generarán dinámicamente -->
+      <div class="header-right">
+        <i class="fas fa-search" title="Buscar"></i>
+        <i class="fas fa-ellipsis-v" title="Menú"></i>
       </div>
     </div>
     
-    <!-- Panel derecho - Área de chat -->
-    <div class="right-panel">
-      <!-- Encabezado del chat -->
-      <div class="chat-header">
-        <div class="contact-info">
-          <div class="contact-avatar" id="contactAvatar">G</div>
-          <div class="contact-details">
-            <h3 id="contactName">Grupo WhatsChat</h3>
-            <p id="contactStatus">En línea</p>
-          </div>
+    <!-- Área de mensajes -->
+    <div class="messages-container" id="messagesContainer">
+      <div class="messages-wrapper" id="messagesWrapper">
+        <!-- Mensaje de bienvenida -->
+        <div class="welcome-message">
+          <p>¡Bienvenido a WhatsChat!<br>Envía mensajes que todos verán en tiempo real.</p>
         </div>
-        <div class="chat-actions">
-          <i class="fas fa-search"></i>
-          <i class="fas fa-paperclip"></i>
-          <i class="fas fa-ellipsis-v"></i>
-        </div>
+        <!-- Los mensajes se cargarán aquí -->
       </div>
       
-      <!-- Mensajes -->
-      <div class="messages-container" id="messagesContainer">
-        <div class="messages-scroll" id="messagesScroll">
-          <!-- Los mensajes se cargarán aquí -->
-          <div class="message incoming">
-            <div class="message-text">¡Bienvenido a WhatsChat! Envía un mensaje para comenzar a chatear.</div>
-            <div class="message-time">11:00</div>
-          </div>
+      <!-- Indicador de escritura -->
+      <div class="typing-indicator" id="typingIndicator">
+        <div class="typing-dots">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
         </div>
+        <span>Alguien está escribiendo...</span>
       </div>
-      
-      <!-- Área de entrada de mensajes -->
-      <div class="input-container">
-        <div class="input-icons">
-          <i class="far fa-smile"></i>
-          <i class="fas fa-paperclip"></i>
-        </div>
-        <div class="input-box">
-          <input type="text" id="messageInput" placeholder="Escribe un mensaje aquí" autocomplete="off">
-        </div>
-        <div class="send-button" id="sendButton">
-          <i class="fas fa-paper-plane"></i>
-        </div>
+    </div>
+    
+    <!-- Notificación de nuevo mensaje -->
+    <div class="new-message-notification" id="newMessageNotification">
+      <i class="fas fa-chevron-down"></i>
+      <span>Nuevo mensaje</span>
+    </div>
+    
+    <!-- Área de entrada de mensajes -->
+    <div class="input-container">
+      <div class="input-left">
+        <i class="far fa-smile" title="Emoji"></i>
+        <i class="fas fa-paperclip" title="Adjuntar"></i>
+      </div>
+      <div class="input-box">
+        <input type="text" id="messageInput" placeholder="Escribe un mensaje" autocomplete="off">
+      </div>
+      <div class="send-button" id="sendButton">
+        <i class="fas fa-paper-plane"></i>
       </div>
     </div>
   </div>
@@ -597,29 +500,36 @@
       // Elementos DOM
       const connectionStatus = document.getElementById('connectionStatus');
       const messagesContainer = document.getElementById('messagesContainer');
-      const messagesScroll = document.getElementById('messagesScroll');
+      const messagesWrapper = document.getElementById('messagesWrapper');
       const messageInput = document.getElementById('messageInput');
       const sendButton = document.getElementById('sendButton');
-      const chatsList = document.getElementById('chatsList');
-      const searchInput = document.getElementById('searchInput');
+      const typingIndicator = document.getElementById('typingIndicator');
+      const newMessageNotification = document.getElementById('newMessageNotification');
+      
+      // Variables de estado
+      let isAtBottom = true;
+      let typingTimeout = null;
+      let lastMessageTime = null;
       
       // Conexión Socket.IO
       const socket = io();
       
       // Estado de conexión
       socket.on('connect', function() {
-        console.log('Conectado al servidor');
+        console.log('✅ Conectado al servidor');
+        connectionStatus.innerHTML = '<i class="fas fa-wifi"></i> Conectado a WhatsChat';
         connectionStatus.classList.add('connected');
+        
         setTimeout(() => {
           connectionStatus.style.display = 'none';
-        }, 3000);
+        }, 2000);
       });
       
       socket.on('disconnect', function() {
-        console.log('Desconectado del servidor');
-        connectionStatus.textContent = 'Reconectando...';
+        console.log('❌ Desconectado del servidor');
+        connectionStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Reconectando...';
         connectionStatus.classList.add('connected');
-        connectionStatus.style.display = 'block';
+        connectionStatus.style.display = 'flex';
       });
       
       // Manejar mensajes entrantes
@@ -639,25 +549,38 @@
         
         const time = new Date(data.time);
         const timeString = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        messageTime.innerHTML = `${timeString} ${data.me ? '<i class="fas fa-check message-status"></i>' : ''}`;
+        
+        // Para mensajes propios, mostrar estado de envío (✓✓)
+        if (data.me) {
+          messageTime.innerHTML = `${timeString} <i class="fas fa-check-double message-status"></i>`;
+        } else {
+          messageTime.textContent = timeString;
+        }
         
         // Ensamblar mensaje
         messageElement.appendChild(messageText);
         messageElement.appendChild(messageTime);
         
         // Añadir al contenedor
-        messagesScroll.appendChild(messageElement);
+        messagesWrapper.appendChild(messageElement);
         
-        // Actualizar último mensaje en lista de chats
-        updateLastMessage(data.text, timeString);
-        
-        // Scroll automático al último mensaje
-        scrollToBottom();
+        // Si el usuario está al final del scroll, hacer scroll automático
+        if (isAtBottom) {
+          scrollToBottom();
+        } else {
+          // Mostrar notificación de nuevo mensaje
+          if (!data.me) {
+            showNewMessageNotification();
+          }
+        }
         
         // Reproducir sonido de notificación para mensajes entrantes
         if (!data.me) {
           playNotificationSound();
         }
+        
+        // Actualizar última hora del mensaje
+        lastMessageTime = time;
       });
       
       // Enviar mensaje
@@ -671,6 +594,35 @@
         // Limpiar input
         messageInput.value = '';
         messageInput.focus();
+        
+        // Ocultar indicador de escritura
+        hideTypingIndicator();
+      }
+      
+      // Detectar cuando el usuario está escribiendo
+      messageInput.addEventListener('input', function() {
+        if (this.value.trim().length > 0) {
+          // Simular que estamos escribiendo (en una app real, enviaríamos un evento al servidor)
+          showTypingIndicator();
+          
+          // Limpiar timeout anterior
+          if (typingTimeout) clearTimeout(typingTimeout);
+          
+          // Ocultar indicador después de 2 segundos de inactividad
+          typingTimeout = setTimeout(hideTypingIndicator, 2000);
+        } else {
+          hideTypingIndicator();
+        }
+      });
+      
+      // Mostrar indicador de escritura
+      function showTypingIndicator() {
+        typingIndicator.classList.add('active');
+      }
+      
+      // Ocultar indicador de escritura
+      function hideTypingIndicator() {
+        typingIndicator.classList.remove('active');
       }
       
       // Event listeners
@@ -683,137 +635,87 @@
         }
       });
       
+      // Detectar scroll para saber si el usuario está al final
+      messagesContainer.addEventListener('scroll', function() {
+        const threshold = 100; // píxeles desde el fondo
+        isAtBottom = this.scrollHeight - this.scrollTop - this.clientHeight < threshold;
+        
+        // Ocultar notificación de nuevo mensaje si el usuario hace scroll hacia abajo
+        if (isAtBottom) {
+          newMessageNotification.style.display = 'none';
+        }
+      });
+      
       // Scroll al fondo del chat
       function scrollToBottom() {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        newMessageNotification.style.display = 'none';
       }
+      
+      // Mostrar notificación de nuevo mensaje
+      function showNewMessageNotification() {
+        newMessageNotification.style.display = 'flex';
+        
+        // Auto-ocultar después de 5 segundos
+        setTimeout(() => {
+          if (!isAtBottom) {
+            newMessageNotification.style.display = 'none';
+          }
+        }, 5000);
+      }
+      
+      // Hacer clic en la notificación para ir al último mensaje
+      newMessageNotification.addEventListener('click', scrollToBottom);
       
       // Sonido de notificación
       function playNotificationSound() {
         try {
-          const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3');
-          audio.volume = 0.3;
-          audio.play();
+          // Crear un sonido simple con Web Audio API (sin archivo externo)
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          
+          oscillator.frequency.value = 800;
+          oscillator.type = 'sine';
+          
+          gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+          
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.5);
         } catch (e) {
           console.log('No se pudo reproducir el sonido de notificación');
         }
       }
       
-      // Actualizar último mensaje en lista de chats
-      function updateLastMessage(text, time) {
-        const chatItems = document.querySelectorAll('.chat-item');
-        if (chatItems.length > 0) {
-          const lastMessage = chatItems[0].querySelector('.chat-last-message');
-          const lastTime = chatItems[0].querySelector('.chat-time');
-          
-          if (lastMessage) {
-            lastMessage.innerHTML = `<i class="fas fa-check"></i> ${text.substring(0, 30)}${text.length > 30 ? '...' : ''}`;
-          }
-          
-          if (lastTime) {
-            lastTime.textContent = time;
-          }
-        }
+      // Cargar mensajes anteriores al cargar la página (simulado)
+      function loadPreviousMessages() {
+        // En una implementación real, aquí cargaríamos mensajes anteriores del servidor
+        // Por ahora, solo mostramos el mensaje de bienvenida
       }
       
-      // Generar lista de chats simulada
-      function generateChatList() {
-        const chats = [
-          { id: 1, name: 'Grupo WhatsChat', lastMessage: '¡Bienvenido a WhatsChat!', time: '11:00', unread: 0, avatarText: 'G' },
-          { id: 2, name: 'Familia', lastMessage: 'Nos vemos en la cena', time: 'Ayer', unread: 2, avatarText: 'F' },
-          { id: 3, name: 'María García', lastMessage: '¿Recibiste mi correo?', time: '09:45', unread: 0, avatarText: 'M' },
-          { id: 4, name: 'Juan Pérez', lastMessage: '¡El partido fue increíble!', time: 'Ayer', unread: 0, avatarText: 'J' },
-          { id: 5, name: 'Trabajo', lastMessage: 'Reunión a las 15:00', time: 'Lun', unread: 5, avatarText: 'T' }
-        ];
-        
-        chatsList.innerHTML = '';
-        
-        chats.forEach(chat => {
-          const chatItem = document.createElement('div');
-          chatItem.className = 'chat-item';
-          
-          chatItem.innerHTML = `
-            <div class="chat-avatar" style="background-color: ${getAvatarColor(chat.name)}">${chat.avatarText}</div>
-            <div class="chat-info">
-              <div class="chat-name-time">
-                <div class="chat-name">${chat.name}</div>
-                <div class="chat-time">${chat.time}</div>
-              </div>
-              <div class="chat-last-message">
-                ${chat.unread > 0 ? '<i class="fas fa-check-double" style="color:#53bdeb"></i>' : '<i class="fas fa-check"></i>'}
-                ${chat.lastMessage}
-              </div>
-            </div>
-          `;
-          
-          chatItem.addEventListener('click', function() {
-            // Actualizar información del contacto en el header
-            document.getElementById('contactName').textContent = chat.name;
-            document.getElementById('contactAvatar').textContent = chat.avatarText;
-            document.getElementById('contactAvatar').style.backgroundColor = getAvatarColor(chat.name);
-            
-            // Marcar como leído
-            chat.unread = 0;
-            this.querySelector('.chat-last-message i').style.color = '#8696a0';
-          });
-          
-          chatsList.appendChild(chatItem);
-        });
+      // Enfocar en el input de mensaje al cargar
+      messageInput.focus();
+      
+      // Scroll al fondo del chat al cargar
+      setTimeout(scrollToBottom, 300);
+      
+      // Cargar mensajes anteriores
+      loadPreviousMessages();
+      
+      // Mostrar hora actual en el header
+      function updateHeaderTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        // Podríamos actualizar algún elemento del header si queremos mostrar la hora actual
       }
       
-      // Color para avatar basado en el nombre
-      function getAvatarColor(name) {
-        const colors = [
-          '#075e54', '#128c7e', '#25d366', '#dcf8c6',
-          '#34b7f1', '#ece5dd', '#ff7e30', '#e74c3c',
-          '#8e44ad', '#2c3e50'
-        ];
-        
-        let hash = 0;
-        for (let i = 0; i < name.length; i++) {
-          hash = name.charCodeAt(i) + ((hash << 5) - hash);
-        }
-        
-        return colors[Math.abs(hash) % colors.length];
-      }
-      
-      // Inicializar
-      function init() {
-        // Generar lista de chats
-        generateChatList();
-        
-        // Configurar color de avatar del usuario
-        const userAvatar = document.getElementById('userAvatar');
-        userAvatar.style.backgroundColor = getAvatarColor('Tú');
-        
-        // Configurar color de avatar del contacto
-        const contactAvatar = document.getElementById('contactAvatar');
-        contactAvatar.style.backgroundColor = getAvatarColor('Grupo WhatsChat');
-        
-        // Configurar búsqueda
-        searchInput.addEventListener('input', function() {
-          const searchTerm = this.value.toLowerCase();
-          const chatItems = document.querySelectorAll('.chat-item');
-          
-          chatItems.forEach(item => {
-            const chatName = item.querySelector('.chat-name').textContent.toLowerCase();
-            if (chatName.includes(searchTerm)) {
-              item.style.display = 'flex';
-            } else {
-              item.style.display = 'none';
-            }
-          });
-        });
-        
-        // Enfocar en el input de mensaje al cargar
-        messageInput.focus();
-        
-        // Scroll al fondo del chat
-        setTimeout(scrollToBottom, 100);
-      }
-      
-      // Inicializar la aplicación
-      init();
+      // Actualizar hora cada minuto
+      setInterval(updateHeaderTime, 60000);
+      updateHeaderTime();
     });
   </script>
 </body>
