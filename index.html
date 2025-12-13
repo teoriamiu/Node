@@ -178,7 +178,7 @@ body {
 
     const mensajes = document.getElementById("mensajes");
     const input = document.getElementById("input");
-    const btn = document.getElementById("btn");
+    const btn = document.getElementById("send");
 
     socket.on("message", data => {
       render(data.text, data.me, data.time);
