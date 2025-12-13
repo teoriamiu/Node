@@ -34,46 +34,45 @@ body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, Arial, sans-serif;
-  height: 100vh;
+  height: 100dvh; /* FIX mobile */
 }
 
 /* ===== App container ===== */
 .app {
   width: 100%;
-  height: 100vh;
+  height: 100dvh; /* FIX mobile */
   background: #efeae2;
   display: flex;
   flex-direction: column;
 }
 
-/* ===== Desktop: fullscreen ===== */
+/* ===== Desktop ===== */
 @media (min-width: 768px) {
   .app {
-    max-width: none;
     height: 100vh;
-    border-radius: 0;
-    box-shadow: none;
   }
 }
 
 /* ===== Header ===== */
 .header {
   height: 56px;
-  background: #fff;
+  background: #ffffff;
   color: #000;
   display: flex;
   align-items: center;
   padding: 0 16px;
   font-weight: 600;
   font-size: 16px;
+  flex-shrink: 0;
 }
 
 /* ===== Messages ===== */
 .messages {
   flex: 1;
   padding: 12px 10px;
+  padding-bottom: calc(70px + env(safe-area-inset-bottom)); /* FIX */
   overflow-y: auto;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23efeae2"/><path d="M0 0h100v100H0z" fill="none"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23efeae2"/></svg>');
 }
 
 /* ===== Message bubbles ===== */
@@ -117,9 +116,12 @@ body {
   display: flex;
   align-items: center;
   padding: 8px;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23efeae2"/><path d="M0 0h100v100H0z" fill="none"/></svg>');
+  padding-bottom: calc(8px + env(safe-area-inset-bottom)); /* FIX */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23efeae2"/></svg>');
+  flex-shrink: 0;
 }
 
+/* ===== Input ===== */
 .input-bar input {
   flex: 1;
   height: 40px;
