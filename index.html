@@ -1,568 +1,593 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <meta name="theme-color" content="#075e54">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
   <title>WhatsChat | Mensajería Simple y Rápida 💬</title>
+  
   <meta name="description" content="WhatsChat: Chatea con tus amigos y familiares con una interfaz familiar y fácil de usar. ¡Conéctate de forma instantánea y segura!">
   <meta name="keywords" content="WhatsChat, Chat, Mensajería, Social, Comunicación, Amigos, Mensajes, WhatsApp Style">
   <meta name="author" content="Agustín Díaz">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://whatschat-ix08.onrender.com/">
-  <link rel="icon" href="https://i.imgur.com/RtN3nkM.jpeg">
-  <meta property="og:title" content="WhatsChat: La Mensajería que Conoces 🟢">
-  <meta property="og:description" content="Una aplicación de chat rápida y privada con el diseño que ya amas. Envía mensajes, fotos y audios al instante.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://i.imgur.com/RtN3nkM.jpeg">
-  <meta property="og:url" content="https://whatschat-ix08.onrender.com/">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="WhatsChat: Chatea Ya Mismo 👋">
-  <meta name="twitter:description" content="Comunícate sin complicaciones. Disfruta de una experiencia de chat intuitiva y enfocada en lo que importa: tus conversaciones.">
-  <meta name="twitter:image" content="https://i.imgur.com/RtN3nkM.jpeg">
   
+  <link rel="icon" href="https://i.imgur.com/RtN3nkM.jpeg">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Helvetica Neue, Helvetica, Lucida Grande, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --whatsapp-green: #075e54;
+      --whatsapp-light-green: #128c7e;
+      --whatsapp-teal-green: #25d366;
+      --whatsapp-chat-bg: #efeae2;
+      --whatsapp-message-out: #dcf8c6;
+      --whatsapp-message-in: #ffffff;
+      --whatsapp-timestamp: #667781;
+      --whatsapp-input-bg: #f0f2f5;
+      --whatsapp-border: #d1d7db;
+      --whatsapp-icon: #54656f;
+      --whatsapp-header-bg: #008069;
+      --whatsapp-encryption: #8696a0;
     }
 
     body {
-      background-color: #111b21;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #111b21;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      overflow: hidden;
     }
 
-    /* App container */
-    .whatsapp-app {
+    /* WhatsApp Main Container */
+    .whatsapp-container {
       width: 100%;
-      max-width: 1600px;
-      height: 95vh;
-      background-color: #111b21;
-      display: flex;
-      border-radius: 3px;
-      overflow: hidden;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Left sidebar - Contact list */
-    .sidebar {
-      width: 30%;
-      min-width: 380px;
-      max-width: 420px;
-      background-color: #111b21;
-      border-right: 1px solid #2f3b43;
+      max-width: 500px;
+      height: 100vh;
+      background: var(--whatsapp-chat-bg);
       display: flex;
       flex-direction: column;
-      color: #e9edef;
+      position: relative;
     }
 
-    /* Sidebar header */
-    .sidebar-header {
-      padding: 10px 16px;
-      background-color: #202c33;
+    @media (min-width: 768px) {
+      .whatsapp-container {
+        height: 90vh;
+        max-height: 900px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+      }
+    }
+
+    /* WhatsApp Header */
+    .whatsapp-header {
+      background: var(--whatsapp-header-bg);
+      padding: 16px 16px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 60px;
+      position: relative;
+      z-index: 100;
     }
 
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      overflow: hidden;
-      background-color: #6a7175;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #111b21;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .avatar-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .sidebar-actions {
-      display: flex;
-      gap: 20px;
-    }
-
-    .sidebar-actions i {
-      font-size: 20px;
-      color: #aebac1;
-      cursor: pointer;
-    }
-
-    /* Search bar */
-    .search-container {
-      padding: 8px 12px;
-      background-color: #111b21;
-      border-bottom: 1px solid #222e35;
-    }
-
-    .search-box {
-      background-color: #202c33;
-      border-radius: 8px;
-      padding: 8px 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .search-box i {
-      color: #8696a0;
-      font-size: 14px;
-    }
-
-    .search-box input {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: #e9edef;
-      font-size: 15px;
-      flex: 1;
-    }
-
-    .search-box input::placeholder {
-      color: #8696a0;
-    }
-
-    /* Contact list */
-    .contact-list {
-      flex: 1;
-      overflow-y: auto;
-      background-color: #111b21;
-    }
-
-    .contact-item {
-      display: flex;
-      padding: 12px 16px;
-      cursor: pointer;
-      border-bottom: 1px solid #222e35;
-      transition: background-color 0.2s;
-    }
-
-    .contact-item:hover {
-      background-color: #202c33;
-    }
-
-    .contact-item.active {
-      background-color: #2a3942;
-    }
-
-    .contact-avatar {
-      width: 49px;
-      height: 49px;
-      border-radius: 50%;
-      overflow: hidden;
-      background-color: #6a7175;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #111b21;
-      font-weight: bold;
-      margin-right: 15px;
-    }
-
-    .contact-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .contact-name-time {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 4px;
-    }
-
-    .contact-name {
-      font-size: 17px;
-      color: #e9edef;
-    }
-
-    .contact-time {
-      font-size: 12px;
-      color: #8696a0;
-    }
-
-    .contact-last-message {
-      font-size: 14px;
-      color: #8696a0;
-      display: flex;
-      align-items: center;
-    }
-
-    .unread-badge {
-      background-color: #00a884;
-      color: #111b21;
-      font-size: 12px;
-      font-weight: bold;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-left: auto;
-    }
-
-    /* Chat main area */
-    .chat-main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background-color: #0b141a;
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23111b21' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    }
-
-    /* Chat header */
-    .chat-header {
-      padding: 10px 16px;
-      background-color: #202c33;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 60px;
-      border-bottom: 1px solid #2f3b43;
-    }
-
-    .chat-contact-info {
+    .header-left {
       display: flex;
       align-items: center;
       gap: 15px;
+      flex: 1;
     }
 
-    .chat-contact-avatar {
+    .back-button {
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .chat-avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      overflow: hidden;
-      background-color: #6a7175;
+      background: linear-gradient(135deg, #667781, #54656f);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #111b21;
-      font-weight: bold;
-    }
-
-    .chat-contact-details h3 {
-      color: #e9edef;
-      font-size: 16px;
+      color: white;
       font-weight: 500;
+      font-size: 18px;
     }
 
-    .chat-contact-details p {
-      color: #8696a0;
+    .chat-info {
+      flex: 1;
+    }
+
+    .chat-name {
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .chat-status {
+      color: rgba(255, 255, 255, 0.9);
       font-size: 13px;
-      margin-top: 2px;
-    }
-
-    .chat-actions {
+      font-weight: 400;
       display: flex;
-      gap: 25px;
-      color: #aebac1;
+      align-items: center;
+      gap: 5px;
     }
 
-    .chat-actions i {
+    .online-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--whatsapp-teal-green);
+      border-radius: 50%;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 20px;
+      color: white;
       font-size: 20px;
+    }
+
+    .header-icon {
       cursor: pointer;
     }
 
-    /* Messages container */
+    /* Encryption Message */
+    .encryption-notice {
+      background: #f0f2f5;
+      padding: 14px 16px;
+      text-align: center;
+      border-bottom: 1px solid var(--whatsapp-border);
+    }
+
+    .encryption-text {
+      color: var(--whatsapp-encryption);
+      font-size: 13px;
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .encryption-icon {
+      color: var(--whatsapp-timestamp);
+      font-size: 14px;
+    }
+
+    .encryption-link {
+      color: var(--whatsapp-light-green);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .encryption-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Date Separator */
+    .date-separator {
+      text-align: center;
+      margin: 20px 0;
+      position: relative;
+    }
+
+    .date-badge {
+      background: rgba(225, 245, 254, 0.92);
+      padding: 5px 12px;
+      border-radius: 15px;
+      font-size: 12.5px;
+      color: var(--whatsapp-timestamp);
+      display: inline-block;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.08);
+    }
+
+    /* Messages Container */
     .messages-container {
       flex: 1;
       overflow-y: auto;
-      padding: 20px 80px;
-      display: flex;
-      flex-direction: column;
+      padding: 0 16px;
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23a1b7c2' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");
+      background-color: var(--whatsapp-chat-bg);
+      background-attachment: fixed;
     }
 
-    /* Messages */
-    .message {
-      max-width: 65%;
-      padding: 6px 7px 8px 9px;
-      margin-bottom: 8px;
+    /* WhatsApp Message Bubbles */
+    .message-wrapper {
+      margin: 4px 0;
+      max-width: 75%;
+      position: relative;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-wrapper.outgoing {
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    .message-wrapper.incoming {
+      align-self: flex-start;
+      margin-right: auto;
+    }
+
+    .message-bubble {
+      padding: 8px 9px 8px 9px;
       border-radius: 7.5px;
       position: relative;
       word-wrap: break-word;
-      box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
-    }
-
-    .message.sent {
-      background-color: #005c4b;
-      align-self: flex-end;
-      border-top-right-radius: 0;
-    }
-
-    .message.received {
-      background-color: #202c33;
-      align-self: flex-start;
-      border-top-left-radius: 0;
-    }
-
-    .message-text {
-      color: #e9edef;
       font-size: 14.2px;
       line-height: 19px;
-      padding-right: 40px;
+      box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+    }
+
+    .outgoing .message-bubble {
+      background: var(--whatsapp-message-out);
+      border-bottom-right-radius: 5px;
+      margin-left: auto;
+    }
+
+    .incoming .message-bubble {
+      background: var(--whatsapp-message-in);
+      border-bottom-left-radius: 5px;
+      margin-right: auto;
+    }
+
+    /* Tail for message bubbles */
+    .outgoing .message-bubble::after {
+      content: '';
+      position: absolute;
+      right: -8px;
+      bottom: 0;
+      width: 0;
+      height: 0;
+      border-left: 8px solid var(--whatsapp-message-out);
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+    }
+
+    .incoming .message-bubble::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      bottom: 0;
+      width: 0;
+      height: 0;
+      border-right: 8px solid var(--whatsapp-message-in);
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+    }
+
+    /* Message metadata */
+    .message-meta {
+      text-align: right;
+      margin-top: 2px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 4px;
+      padding-right: 2px;
     }
 
     .message-time {
-      position: absolute;
-      bottom: 6px;
-      right: 7px;
       font-size: 11px;
-      color: #ffffff99;
-      display: flex;
-      align-items: center;
-      gap: 3px;
+      color: var(--whatsapp-timestamp);
+      display: inline-block;
     }
 
-    .message.sent .message-time {
-      color: #99ffe1;
+    .outgoing .message-time {
+      color: #4a9b5e;
     }
 
-    .message-info {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 2px;
+    .status-icon {
+      font-size: 12px;
+      color: #4a9b5e;
     }
 
-    .message-date {
-      color: #8696a0;
-      font-size: 12.5px;
-      padding: 25px 0 15px;
-      text-align: center;
-    }
-
-    /* Input area */
-    .input-area {
-      padding: 10px 16px;
-      background-color: #202c33;
+    /* Input Area - WhatsApp Style */
+    .input-container {
+      background: var(--whatsapp-input-bg);
+      padding: 8px 12px;
       display: flex;
       align-items: center;
       gap: 8px;
-      min-height: 62px;
+      border-top: 1px solid var(--whatsapp-border);
     }
 
     .input-actions {
       display: flex;
-      gap: 15px;
-      color: #8696a0;
-      font-size: 24px;
+      align-items: center;
+      gap: 12px;
+      color: var(--whatsapp-icon);
     }
 
-    .input-actions i {
+    .input-action {
       cursor: pointer;
+      font-size: 24px;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background 0.2s;
     }
 
-    .message-input-container {
+    .input-action:hover {
+      background: rgba(0,0,0,0.05);
+    }
+
+    .message-input-wrapper {
       flex: 1;
-      background-color: #2a3942;
-      border-radius: 8px;
-      padding: 9px 12px;
       display: flex;
+      background: white;
+      border-radius: 20px;
+      padding: 2px 2px 2px 16px;
       align-items: center;
     }
 
     .message-input {
       flex: 1;
-      background: transparent;
       border: none;
       outline: none;
-      color: #e9edef;
       font-size: 15px;
-      max-height: 100px;
-      resize: none;
+      padding: 10px 0;
+      background: transparent;
       font-family: inherit;
-      padding: 0;
     }
 
     .message-input::placeholder {
-      color: #8696a0;
+      color: #9ca0a4;
     }
 
-    .input-smile {
-      color: #8696a0;
-      font-size: 22px;
-      margin-left: 10px;
-      cursor: pointer;
-    }
-
-    .voice-message-btn {
+    .send-button {
+      background: var(--whatsapp-light-green);
+      color: white;
+      border: none;
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-color: #005c4b;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
       cursor: pointer;
+      transition: background 0.2s;
       margin-left: 8px;
     }
 
-    /* Icons */
-    i {
-      font-style: normal;
+    .send-button:hover {
+      background: var(--whatsapp-green);
     }
 
-    .icon {
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
+    .send-icon {
+      font-size: 20px;
+      transform: rotate(0deg);
     }
 
-    .icon-menu { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23aebac1'%3E%3Cpath d='M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z'/%3E%3C/svg%3E"); }
-    .icon-status { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23aebac1'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3C/svg%3E"); }
-    .icon-chat { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23aebac1'%3E%3Cpath d='M19.005 3.175H4.674C3.642 3.175 3 3.789 3 4.821V21.02l3.544-3.514h12.461c1.033 0 2.064-1.06 2.064-2.093V4.821c-.001-1.032-1.032-1.646-2.064-1.646zm-4.989 9.869H7.041V11.1h6.975v1.944zm3-4H7.041V7.1h9.975v1.944z'/%3E%3C/svg%3E"); }
-    .icon-community { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23aebac1'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM9 12c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm7 0c-.28 0-.5-.22-.5-.5s.22-.5.5-.5.5.22.5.5-.22.5-.5.5zm2.5 0c-.28 0-.5-.22-.5-.5s.22-.5.5-.5.5.22.5.5-.22.5-.5.5z'/%3E%3C/svg%3E"); }
-    .icon-search { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238696a0'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E"); }
-    .icon-filter { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238696a0'%3E%3Cpath d='M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z'/%3E%3C/svg%3E"); }
-    .icon-attach { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238696a0'%3E%3Cpath d='M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z'/%3E%3C/svg%3E"); }
-    .icon-mic { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'%3E%3Cpath d='M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z'/%3E%3Cpath d='M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z'/%3E%3C/svg%3E"); }
-    .icon-send { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'%3E%3Cpath d='M2.01 21L23 12 2.01 3 2 10l15 2-15 2z'/%3E%3C/svg%3E"); }
-
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
+    /* Scrollbar */
+    .messages-container::-webkit-scrollbar {
       width: 6px;
     }
 
-    ::-webkit-scrollbar-track {
+    .messages-container::-webkit-scrollbar-track {
       background: transparent;
     }
 
-    ::-webkit-scrollbar-thumb {
-      background: #374045;
+    .messages-container::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.2);
       border-radius: 3px;
     }
 
-    ::-webkit-scrollbar-thumb:hover {
-      background: #4a5c65;
+    .messages-container::-webkit-scrollbar-thumb:hover {
+      background: rgba(0,0,0,0.3);
     }
 
-    /* Responsive */
-    @media (max-width: 900px) {
-      .sidebar {
-        display: none;
-      }
-      
-      .messages-container {
-        padding: 20px 20px;
-      }
+    /* Welcome State */
+    .welcome-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 40px 20px;
+      text-align: center;
+      background: var(--whatsapp-chat-bg);
+    }
+
+    .welcome-icon {
+      font-size: 64px;
+      color: var(--whatsapp-light-green);
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+
+    .welcome-title {
+      font-size: 32px;
+      color: var(--whatsapp-green);
+      margin-bottom: 8px;
+      font-weight: 300;
+    }
+
+    .welcome-subtitle {
+      color: var(--whatsapp-timestamp);
+      font-size: 14px;
+      line-height: 1.5;
+      max-width: 400px;
+    }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(7, 94, 84, 0.2);
+      border-top-color: var(--whatsapp-light-green);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Typing Indicator */
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 15px;
+      background: white;
+      border-radius: 10px;
+      width: fit-content;
+      margin: 4px 0;
+      box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--whatsapp-icon);
+      border-radius: 50%;
+      animation: typing 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes typing {
+      0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      color: var(--whatsapp-timestamp);
+      font-size: 14px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      margin: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
   </style>
 </head>
+
 <body>
-  <div class="whatsapp-app">
-    <!-- Left sidebar with contacts -->
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <div class="user-avatar">
-          <div class="avatar-img">Tú</div>
+  <div class="whatsapp-container">
+    <!-- WhatsApp Header -->
+    <div class="whatsapp-header">
+      <div class="header-left">
+        <div class="back-button">
+          <i class="fas fa-arrow-left"></i>
         </div>
-        <div class="sidebar-actions">
-          <div class="icon icon-community"></div>
-          <div class="icon icon-status"></div>
-          <div class="icon icon-chat"></div>
-          <div class="icon icon-menu"></div>
+        <div class="chat-avatar">
+          <i class="fas fa-user-friends"></i>
+        </div>
+        <div class="chat-info">
+          <div class="chat-name">WhatsChat</div>
+          <div class="chat-status">
+            <span class="online-dot"></span>
+            <span id="onlineCount">en línea</span>
+          </div>
         </div>
       </div>
-      
-      <div class="search-container">
-        <div class="search-box">
-          <div class="icon icon-search"></div>
-          <input type="text" placeholder="Buscar o empezar un chat nuevo">
-          <div class="icon icon-filter"></div>
+      <div class="header-right">
+        <div class="header-icon">
+          <i class="fas fa-video"></i>
         </div>
-      </div>
-      
-      <div class="contact-list">
-        <!-- Active chat will be highlighted -->
-        <div class="contact-item active">
-          <div class="contact-avatar">
-            GC
-          </div>
-          <div class="contact-info">
-            <div class="contact-name-time">
-              <div class="contact-name">Grupo de WhatsChat</div>
-              <div class="contact-time" id="current-time">--:--</div>
-            </div>
-            <div class="contact-last-message">
-              <span id="last-message-preview">Tú: Bienvenido al chat</span>
-              <div class="unread-badge" id="unread-count">1</div>
-            </div>
-          </div>
+        <div class="header-icon">
+          <i class="fas fa-phone"></i>
+        </div>
+        <div class="header-icon">
+          <i class="fas fa-ellipsis-v"></i>
         </div>
       </div>
     </div>
-    
-    <!-- Main chat area -->
-    <div class="chat-main">
-      <div class="chat-header">
-        <div class="chat-contact-info">
-          <div class="chat-contact-avatar">
-            GC
-          </div>
-          <div class="chat-contact-details">
-            <h3>Grupo de WhatsChat</h3>
-            <p>En línea</p>
-          </div>
+
+    <!-- Encryption Notice -->
+    <div class="encryption-notice">
+      <div class="encryption-text">
+        <i class="fas fa-lock encryption-icon"></i>
+        <span>Los mensajes y las llamadas están cifrados de extremo a extremo. Nadie fuera de este chat puede leerlos o escucharlos, ni siquiera WhatsChat.</span>
+        <a class="encryption-link">Obtén más información.</a>
+      </div>
+    </div>
+
+    <!-- Messages Container -->
+    <div id="messages" class="messages-container">
+      <!-- Date Separator -->
+      <div class="date-separator">
+        <div class="date-badge">HOY</div>
+      </div>
+
+      <!-- Messages will be inserted here -->
+      
+      <!-- Welcome State (shown when no messages) -->
+      <div class="welcome-state" id="welcomeState">
+        <div class="welcome-icon">
+          <i class="fas fa-comments"></i>
         </div>
-        
-        <div class="chat-actions">
-          <div class="icon icon-search"></div>
-          <div class="icon icon-menu"></div>
+        <h1 class="welcome-title">WhatsChat</h1>
+        <p class="welcome-subtitle">
+          Envía y recibe mensajes sin necesidad de tener tu teléfono conectado.<br>
+          Usa WhatsChat en hasta 4 dispositivos vinculados y 1 teléfono al mismo tiempo.
+        </p>
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="input-container">
+      <div class="input-actions">
+        <div class="input-action">
+          <i class="fas fa-plus-circle"></i>
+        </div>
+        <div class="input-action">
+          <i class="fas fa-camera"></i>
         </div>
       </div>
       
-      <!-- Messages container -->
-      <div class="messages-container" id="mensajes">
-        <div class="message-date" id="current-date">Hoy</div>
-        
-        <!-- Messages will be inserted here by JavaScript -->
-        <div class="message received">
-          <div class="message-text">¡Bienvenido a WhatsChat! Este es un chat grupal donde todos pueden participar. Los mensajes se guardan automáticamente.</div>
-          <div class="message-time">10:00</div>
-        </div>
-        
-        <div class="message sent">
-          <div class="message-text">¡Hola a todos! Me encanta esta interfaz, se ve exactamente como WhatsApp.</div>
-          <div class="message-time">
-            10:02
-            <span>✓✓</span>
-          </div>
-        </div>
+      <div class="message-input-wrapper">
+        <input 
+          type="text" 
+          id="input" 
+          class="message-input" 
+          placeholder="Escribe un mensaje aquí"
+          autocomplete="off"
+          maxlength="1000"
+        >
+        <button id="btn" class="send-button">
+          <i class="fas fa-paper-plane send-icon"></i>
+        </button>
       </div>
       
-      <!-- Input area -->
-      <div class="input-area">
-        <div class="input-actions">
-          <div class="icon icon-attach"></div>
-        </div>
-        
-        <div class="message-input-container">
-          <textarea class="message-input" id="input" placeholder="Escribe un mensaje aquí" rows="1"></textarea>
-          <div class="input-smile">😊</div>
-        </div>
-        
-        <div class="voice-message-btn" id="btn">
-          <div class="icon icon-send"></div>
+      <div class="input-actions">
+        <div class="input-action">
+          <i class="fas fa-microphone"></i>
         </div>
       </div>
     </div>
@@ -570,117 +595,169 @@
 
   <!-- Socket.IO -->
   <script src="/socket.io/socket.io.js"></script>
-  
+
   <script>
     const socket = io();
-    const messagesContainer = document.getElementById("mensajes");
-    const input = document.getElementById("input");
-    const btn = document.getElementById("btn");
-    const lastMessagePreview = document.getElementById("last-message-preview");
-    const unreadCount = document.getElementById("unread-count");
-    const currentTimeElement = document.getElementById("current-time");
-    const currentDateElement = document.getElementById("current-date");
-    
-    // Set current time and date
-    function updateTime() {
-      const now = new Date();
-      currentTimeElement.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      
-      const today = new Date();
-      const options = { weekday: 'long', day: 'numeric', month: 'long' };
-      currentDateElement.textContent = today.toLocaleDateString('es-ES', options);
+    const messagesContainer = document.getElementById('messages');
+    const input = document.getElementById('input');
+    const btn = document.getElementById('btn');
+    const onlineCountElement = document.getElementById('onlineCount');
+    const welcomeState = document.getElementById('welcomeState');
+
+    // Keep track of message count
+    let messageCount = 0;
+
+    // Format time as HH:MM
+    function formatTime(timestamp) {
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
-    
-    updateTime();
-    setInterval(updateTime, 60000); // Update time every minute
-    
-    // Auto-resize textarea
-    input.addEventListener('input', function() {
-      this.style.height = 'auto';
-      this.style.height = (this.scrollHeight) + 'px';
-    });
-    
-    // Handle sending messages
-    socket.on("message", data => {
-      render(data.text, data.me, data.time);
-      updateLastMessagePreview(data.text, data.me);
-      updateUnreadCount();
-    });
-    
-    btn.onclick = send;
-    input.addEventListener("keydown", e => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        send();
-      }
-    });
-    
-    function send() {
-      const text = input.value.trim();
-      if (!text) return;
-      
-      socket.emit("message", { text });
-      input.value = "";
-      input.style.height = 'auto';
+
+    // Get today's date in Spanish
+    function getTodayDate() {
+      return new Date().toLocaleDateString('es-ES', { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long' 
+      }).toUpperCase();
     }
-    
-    function render(text, me, time) {
-      const messageDiv = document.createElement("div");
-      messageDiv.className = `message ${me ? "sent" : "received"}`;
-      
-      const textDiv = document.createElement("div");
-      textDiv.className = "message-text";
-      textDiv.textContent = text;
-      
-      const timeDiv = document.createElement("div");
-      timeDiv.className = "message-time";
-      
-      const timeString = new Date(time).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-      
-      timeDiv.textContent = timeString;
-      
-      if (me) {
-        const checkmarks = document.createElement("span");
-        checkmarks.textContent = " ✓✓";
-        timeDiv.appendChild(checkmarks);
+
+    // Render a message
+    function renderMessage(text, isOutgoing, timestamp) {
+      // Hide welcome state when first message arrives
+      if (messageCount === 0 && welcomeState) {
+        welcomeState.style.display = 'none';
       }
+
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message-wrapper ${isOutgoing ? 'outgoing' : 'incoming'}`;
       
-      messageDiv.appendChild(textDiv);
-      messageDiv.appendChild(timeDiv);
+      const timeString = formatTime(timestamp);
+      
+      messageDiv.innerHTML = `
+        <div class="message-bubble">
+          ${escapeHtml(text)}
+          <div class="message-meta">
+            <span class="message-time">${timeString}</span>
+            ${isOutgoing ? '<i class="fas fa-check-double status-icon"></i>' : ''}
+          </div>
+        </div>
+      `;
+      
       messagesContainer.appendChild(messageDiv);
-      
-      // Scroll to bottom
+      scrollToBottom();
+      messageCount++;
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Scroll to bottom of messages
+    function scrollToBottom() {
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
-    
-    function updateLastMessagePreview(text, isMe) {
-      const preview = isMe ? `Tú: ${text}` : text;
-      if (preview.length > 30) {
-        lastMessagePreview.textContent = preview.substring(0, 30) + '...';
-      } else {
-        lastMessagePreview.textContent = preview;
-      }
+
+    // Send message
+    function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      const time = Date.now();
+      
+      // Immediately render own message (optimistic UI)
+      renderMessage(text, true, time);
+      
+      // Send to server
+      socket.emit('message', { text });
+      
+      // Clear input and focus
+      input.value = '';
+      input.focus();
     }
-    
-    function updateUnreadCount() {
-      // In a real app, you would track unread messages
-      // For demo, we'll just show 1
-      unreadCount.textContent = "1";
-    }
-    
-    // Load initial messages from server
-    socket.on("connect", () => {
-      console.log("Conectado al servidor de chat");
+
+    // Receive message from server
+    socket.on('message', data => {
+      renderMessage(data.text, data.me, data.time);
     });
+
+    // Update online users count
+    let onlineUsers = 1;
+    socket.on('user connected', () => {
+      onlineUsers++;
+      updateOnlineStatus();
+    });
+
+    socket.on('user disconnected', () => {
+      onlineUsers = Math.max(1, onlineUsers - 1);
+      updateOnlineStatus();
+    });
+
+    function updateOnlineStatus() {
+      const status = onlineUsers === 1 ? 'en línea' : `${onlineUsers} en línea`;
+      onlineCountElement.textContent = status;
+    }
+
+    // Event listeners
+    btn.onclick = sendMessage;
     
-    // Add some initial messages for demo
-    setTimeout(() => {
-      render("¿Cómo funciona este chat? ¿Los mensajes se guardan?", false, Date.now() - 600000);
-      render("Sí, los mensajes se guardan en la base de datos y persisten al recargar la página o cambiar de dispositivo.", true, Date.now() - 300000);
-    }, 1000);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Auto-focus input on page load
+    window.addEventListener('load', () => {
+      input.focus();
+      // Update date badge
+      const dateBadge = document.querySelector('.date-badge');
+      if (dateBadge) {
+        dateBadge.textContent = getTodayDate();
+      }
+    });
+
+    // Handle back button
+    document.querySelector('.back-button').addEventListener('click', () => {
+      // In a real app, this would go back to chats list
+      console.log('Back button clicked');
+    });
+
+    // Handle connection status
+    socket.on('connect_error', () => {
+      console.error('Connection error');
+      onlineCountElement.textContent = 'conectando...';
+    });
+
+    socket.on('reconnect', () => {
+      console.log('Reconnected to server');
+      onlineCountElement.textContent = 'en línea';
+    });
+
+    // Add some sample messages for demo
+    window.addEventListener('DOMContentLoaded', () => {
+      // These are just for demo - they won't appear in production
+      // since messages come from server
+      setTimeout(() => {
+        if (messageCount === 0) {
+          // Show demo messages only if no real messages exist
+          const welcomeMessages = [
+            { text: "¡Bienvenido a WhatsChat! 👋", outgoing: false },
+            { text: "Envía un mensaje para comenzar a chatear", outgoing: false }
+          ];
+          
+          welcomeMessages.forEach((msg, i) => {
+            setTimeout(() => {
+              renderMessage(msg.text, msg.outgoing, Date.now() - (welcomeMessages.length - i) * 1000);
+            }, i * 500);
+          });
+        }
+      }, 1000);
+    });
   </script>
 </body>
 </html>
