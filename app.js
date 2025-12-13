@@ -22,6 +22,7 @@ const pool = new Pool({
   await pool.query(`
     CREATE TABLE IF NOT EXISTS messages (
       id SERIAL PRIMARY KEY,
+      user_name TEXT NOT NULL,
       text TEXT NOT NULL,
       timestamp BIGINT NOT NULL
     )
@@ -40,13 +41,13 @@ app.get("/", (_, res) => {
 io.on("connection", async socket => {
   console.log("🔗 Usuario conectado:", socket.id);
   
-  // Enviar historial
   const { rows } = await pool.query(
-    "SELECT text, timestamp FROM messages ORDER BY id ASC LIMIT 100"
+    "SELECT user_name, text, timestamp FROM messages ORDER BY id ASC LIMIT 100"
   );
   
   rows.forEach(row => {
     socket.emit("message", {
+      user: row.user_name,
       text: row.text,
       time: row.timestamp,
       me: false
@@ -57,12 +58,13 @@ io.on("connection", async socket => {
     const time = Date.now();
     
     await pool.query(
-      "INSERT INTO messages (text, timestamp) VALUES ($1, $2)",
-      [data.text, time]
+      "INSERT INTO messages (user_name, text, timestamp) VALUES ($1, $2, $3)",
+      [data.user, data.text, time]
     );
     
     io.sockets.sockets.forEach(s => {
       s.emit("message", {
+        user: data.user,
         text: data.text,
         time,
         me: s.id === socket.id
