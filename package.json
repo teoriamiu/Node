@@ -1,13 +1,20 @@
 {
-  "name": "node-basic",
+  "name": "whatschat",
   "version": "1.0.0",
+  "description": "Chat en tiempo real estilo WhatsApp",
   "main": "app.js",
-  "license": "MIT",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "ws": "^8.17.0"
+    "socket.io": "^4.5.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
