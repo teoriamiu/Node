@@ -34,13 +34,15 @@ const wss = new WebSocket.Server({ server });
 wss.on("connection", (ws) => {
   console.log("🔗 Usuario conectado");
   
-  // Enviar historial al conectarse
+  // Enviar historial
   db.all(
     "SELECT text FROM messages ORDER BY id ASC LIMIT 100",
     [],
     (err, rows) => {
       if (!err) {
-        rows.forEach(row => ws.send(row.text));
+        rows.forEach(row => {
+          ws.send(String(row.text));
+        });
       }
     }
   );
@@ -49,13 +51,13 @@ wss.on("connection", (ws) => {
     const text = msg.toString();
     console.log("💬 Mensaje:", text);
     
-    // Guardar en SQLite
+    // Guardar
     db.run("INSERT INTO messages (text) VALUES (?)", [text]);
     
-    // Reenviar a todos
+    // Broadcast
     wss.clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(text);
+        client.send(String(text));
       }
     });
   });
@@ -67,5 +69,5 @@ wss.on("connection", (ws) => {
 
 // ===== Start =====
 server.listen(PORT, "0.0.0.0", () => {
-  console.log("🚀 Servidor en puerto", PORT);
+  console.log("🚀 Servidor escuchando en puerto", PORT);
 });

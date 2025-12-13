@@ -5,7 +5,13 @@
   <title>Chat en tiempo real</title>
   <style>
     body { font-family: Arial; padding: 20px; }
-    #mensajes { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; margin-bottom: 10px; }
+    #mensajes {
+      border: 1px solid #ccc;
+      padding: 10px;
+      height: 300px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
     #input { width: 80%; padding: 8px; }
     #btn { padding: 8px; }
   </style>
@@ -20,13 +26,30 @@
 <button id="btn">Enviar</button>
 
 <script>
-  const ws = new WebSocket(`wss://${location.host}`);
+  const protocol = location.protocol === "https:" ? "wss" : "ws";
+  const ws = new WebSocket(`${protocol}://${location.host}`);
+
   const mensajes = document.getElementById("mensajes");
   const input = document.getElementById("input");
   const btn = document.getElementById("btn");
 
+  ws.onopen = () => {
+    console.log("✅ WebSocket conectado");
+  };
+
+  ws.onerror = (e) => {
+    console.error("❌ WebSocket error", e);
+  };
+
+  ws.onclose = () => {
+    console.log("🔌 WebSocket cerrado");
+  };
+
   ws.onmessage = async (event) => {
-    const text = await event.data.text();
+    const text = typeof event.data === "string"
+      ? event.data
+      : await event.data.text();
+
     const div = document.createElement("div");
     div.textContent = text;
     mensajes.appendChild(div);
@@ -35,7 +58,7 @@
 
   btn.onclick = () => {
     const texto = input.value.trim();
-    if (texto) {
+    if (texto !== "") {
       ws.send(texto);
       input.value = "";
     }
