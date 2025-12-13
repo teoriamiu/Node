@@ -5,32 +5,42 @@ const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
 
-// Servir archivos estáticos
+// Configuración optimizada para producción
+const io = socketIo(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  },
+  pingTimeout: 60000,
+  pingInterval: 25000
+});
+
+// Middleware
 app.use(express.static(path.join(__dirname)));
 
-// Ruta principal
+// Ruta principal - sirve el index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Endpoint de salud para Render.com
+// Health check para Render.com (CRÍTICO)
 app.get('/health', (req, res) => {
-  res.json({
-    status: 'ok',
+  res.status(200).json({
+    status: 'healthy',
     timestamp: new Date().toISOString(),
+    service: 'WhatsChat',
     users: users.length,
     messages: messages.length
   });
 });
 
-// Almacenamiento en memoria
+// Simulación de base de datos en memoria
 let users = [];
 let messages = [];
 let typingUsers = new Set();
 
-// Socket.IO
+// Socket.IO - Lógica del chat
 io.on('connection', (socket) => {
   console.log(`🔗 Usuario conectado: ${socket.id}`);
   
@@ -63,7 +73,7 @@ io.on('connection', (socket) => {
       message: `${username} se ha unido al chat`
     });
     
-    // Enviar historial
+    // Enviar historial de mensajes
     socket.emit('message_history', messages.slice(-50));
   });
   
@@ -74,15 +84,14 @@ io.on('connection', (socket) => {
       username: data.username,
       text: data.text,
       timestamp: new Date(),
-      userId: socket.id,
-      read: false
+      userId: socket.id
     };
     
     messages.push(message);
     
-    // Mantener solo últimos 1000 mensajes
-    if (messages.length > 1000) {
-      messages = messages.slice(-1000);
+    // Mantener solo últimos 500 mensajes en memoria
+    if (messages.length > 500) {
+      messages = messages.slice(-500);
     }
     
     io.emit('new_message', message);
@@ -94,7 +103,7 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('user_typing', Array.from(typingUsers));
   });
   
-  // Dejar de escribir
+  // Usuario dejó de escribir
   socket.on('stop_typing', (username) => {
     typingUsers.delete(username);
     socket.broadcast.emit('user_typing', Array.from(typingUsers));
@@ -118,14 +127,14 @@ io.on('connection', (socket) => {
       typingUsers.delete(user.username);
       socket.broadcast.emit('user_typing', Array.from(typingUsers));
     }
-    
-    console.log(`🔌 Usuario desconectado: ${socket.id}`);
   });
 });
 
-// Puerto para Render.com
+// Puerto para Render.com (usa process.env.PORT)
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
+
+// Iniciar servidor
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 WhatsChat corriendo en puerto ${PORT}`);
-  console.log(`👉 http://localhost:${PORT}`);
+  console.log(`🌐 Health check disponible en: http://localhost:${PORT}/health`);
 });
