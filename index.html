@@ -11,17 +11,21 @@
 </head>  
 <body>  <h2>Chat en tiempo real</h2>  <div id="mensajes"></div>  <input id="input" placeholder="Escribí un mensaje..." />  
 <button id="btn">Enviar</button>  <script>  
-  const ws = new WebSocket(`ws://${location.host}`);  
+  const ws = new WebSocket(`wss://${location.host}`);
   const mensajes = document.getElementById("mensajes");  
   const input = document.getElementById("input");  
   const btn = document.getElementById("btn");  
   
-  ws.onmessage = (event) => {  
-    const div = document.createElement("div");  
-    div.textContent = event.data;  
-    mensajes.appendChild(div);  
-    mensajes.scrollTop = mensajes.scrollHeight;  
-  };  
+  
+
+ws.onmessage = async (event) => {
+  const text = await event.data.text(); // ← convertimos Blob a texto real
+  
+  const div = document.createElement("div");
+  div.textContent = text;
+  mensajes.appendChild(div);
+  mensajes.scrollTop = mensajes.scrollHeight;
+};
   
   btn.onclick = () => {  
     const texto = input.value.trim();  
