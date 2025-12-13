@@ -1,0 +1,307 @@
+Crear únicamente la interfaz de usuario (UI) de una aplicación de chat llamada “WhatsChat”, con estilo visual idéntico a WhatsApp en modo claro (normal).
+
+No modificar bajo ningún motivo el backend existente:
+
+Mantener exactamente las mismas rutas, eventos, lógica y estructura actuales.
+
+La persistencia de mensajes debe funcionar igual que ahora, conservándose al recargar la página y al acceder desde otro navegador o dispositivo.
+
+
+La aplicación debe ser exclusivamente para chatear, sin agregar funciones extra.
+
+El comportamiento y la experiencia de uso deben ser exactamente iguales a WhatsApp, cambiando solo el diseño visual (UI).
+
+// .html
+
+<!DOCTYPE html>
+<html lang="es">
+  
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="theme-color" content="#075e54"> 
+  
+  <title>WhatsChat | Mensajería Simple y Rápida 💬</title>
+  
+  <meta name="description" content="WhatsChat: Chatea con tus amigos y familiares con una interfaz familiar y fácil de usar. ¡Conéctate de forma instantánea y segura!">
+  <meta name="keywords" content="WhatsChat, Chat, Mensajería, Social, Comunicación, Amigos, Mensajes, WhatsApp Style">
+  <meta name="author" content="Agustín Díaz">
+  <meta name="robots" content="index, follow">
+  
+  <link rel="canonical" href="https://whatschat-ix08.onrender.com/"> 
+  
+  <link rel="icon" href="https://i.imgur.com/RtN3nkM.jpeg"> 
+  
+  <meta property="og:title" content="WhatsChat: La Mensajería que Conoces 🟢">
+  <meta property="og:description" content="Una aplicación de chat rápida y privada con el diseño que ya amas. Envía mensajes, fotos y audios al instante.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://i.imgur.com/RtN3nkM.jpeg"> 
+  <meta property="og:url" content="https://whatschat-ix08.onrender.com/"> <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="WhatsChat: Chatea Ya Mismo 👋">
+  <meta name="twitter:description" content="Comunícate sin complicaciones. Disfruta de una experiencia de chat intuitiva y enfocada en lo que importa: tus conversaciones.">
+  <meta name="twitter:image" content="https://i.imgur.com/RtN3nkM.jpeg"> 
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+  background: #075e54;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.app {
+  width: 100%;
+  max-width: 480px;
+  background: #efeae2;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+@media (min-width: 768px) {
+  body {
+    background: #111b21;
+    align-items: center;
+  }
+  .app {
+    height: 90vh;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,.4);
+  }
+}
+
+.header {
+  background: #075e54;
+  color: #fff;
+  padding: 14px;
+  font-weight: 600;
+}
+
+.messages {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.message {
+  max-width: 78%;
+  padding: 8px 10px 18px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  border-radius: 8px;
+  position: relative;
+  word-wrap: break-word;
+}
+
+.message.me {
+  background: #dcf8c6;
+  margin-left: auto;
+  border-bottom-right-radius: 0;
+}
+
+.message.other {
+  background: #fff;
+  margin-right: auto;
+  border-bottom-left-radius: 0;
+}
+
+.time {
+  position: absolute;
+  bottom: 4px;
+  right: 8px;
+  font-size: 11px;
+  color: #667781;
+}
+
+.input-bar {
+  display: flex;
+  padding: 10px;
+  background: #f0f2f5;
+}
+
+.input-bar input {
+  flex: 1;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 14px;
+  outline: none;
+}
+
+.input-bar button {
+  margin-left: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #075e54;
+  color: #fff;
+  font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+  <div class="header">WhatsChat</div>
+  <div id="mensajes" class="messages"></div>
+  <div class="input-bar">
+    <input id="input" placeholder="Escribí un mensaje…" autocomplete="off">
+    <button id="btn">➤</button>
+  </div>
+</div>
+
+<!-- Socket.IO -->
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+const socket = io();
+
+const mensajes = document.getElementById("mensajes");
+const input = document.getElementById("input");
+const btn = document.getElementById("btn");
+
+socket.on("message", data => {
+  render(data.text, data.me, data.time);
+});
+
+btn.onclick = send;
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter") send();
+});
+
+function send() {
+  const text = input.value.trim();
+  if (!text) return;
+
+  socket.emit("message", { text });
+  input.value = "";
+}
+
+function render(text, me, time) {
+  const div = document.createElement("div");
+  div.className = `message ${me ? "me" : "other"}`;
+
+  const msg = document.createElement("div");
+  msg.textContent = text;
+
+  const t = document.createElement("div");
+  t.className = "time";
+  t.textContent = new Date(time).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  div.appendChild(msg);
+  div.appendChild(t);
+  mensajes.appendChild(div);
+  mensajes.scrollTop = mensajes.scrollHeight;
+}
+</script>
+
+</body>
+</html>
+
+// .js
+
+const express = require("express");
+const path = require("path");
+const http = require("http");
+const { Server } = require("socket.io");
+const sqlite3 = require("sqlite3").verbose();
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+const PORT = process.env.PORT || 3000;
+
+// ===== SQLite =====
+const db = new sqlite3.Database("./chat.db");
+
+db.run(`
+CREATE TABLE IF NOT EXISTS messages (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+text TEXT NOT NULL,
+timestamp INTEGER
+)
+`);
+
+// ===== Express =====
+app.use(express.static(__dirname));
+
+app.get("/", (_, res) => {
+res.sendFile(path.join(__dirname, "index.html"));
+});
+
+// ===== Socket.IO =====
+io.on("connection", socket => {
+console.log("🔗 Usuario conectado:", socket.id);
+
+// Enviar historial
+db.all(
+"SELECT text, timestamp FROM messages ORDER BY id ASC LIMIT 100",
+[],
+(_, rows) => {
+rows.forEach(row => {
+socket.emit("message", {
+text: row.text,
+time: row.timestamp,
+me: false
+});
+});
+}
+);
+
+socket.on("message", data => {
+const time = Date.now();
+
+db.run(
+"INSERT INTO messages (text, timestamp) VALUES (?, ?)",
+[data.text, time]
+);
+
+io.sockets.sockets.forEach(s => {
+s.emit("message", {
+text: data.text,
+time,
+me: s.id === socket.id
+});
+});
+});
+
+socket.on("disconnect", () => {
+console.log("❌ Usuario desconectado:", socket.id);
+});
+});
+
+server.listen(PORT, "0.0.0.0", () => {
+console.log("🚀 Servidor escuchando en puerto", PORT);
+});
+
+// .json
+
+{
+"name": "whatschat",
+"version": "1.0.0",
+"description": "Chat en tiempo real estilo WhatsApp con Socket.IO y SQLite",
+"main": "app.js",
+"license": "MIT",
+"scripts": {
+"start": "node app.js"
+},
+"engines": {
+"node": ">=20"
+},
+"dependencies": {
+"express": "4.19.2",
+"socket.io": "4.8.1",
+"sqlite3": "5.1.7"
+}
+}
