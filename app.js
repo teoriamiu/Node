@@ -1,24 +1,25 @@
 const express = require("express");
 const path = require("path");
 const http = require("http");
-const WebSocket = require("ws");
+const { Server } = require("socket.io");
 const sqlite3 = require("sqlite3").verbose();
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
 const PORT = process.env.PORT || 3000;
 
 // ===== SQLite =====
 const db = new sqlite3.Database("./chat.db");
 
-db.serialize(() => {
-  db.run(`
-    CREATE TABLE IF NOT EXISTS messages (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      text TEXT NOT NULL,
-      timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
-});
+db.run(`
+CREATE TABLE IF NOT EXISTS messages (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+text TEXT NOT NULL,
+timestamp INTEGER
+)
+`);
 
 // ===== Express =====
 app.use(express.static(__dirname));
@@ -27,47 +28,47 @@ app.get("/", (_, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// ===== HTTP + WebSocket =====
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
-
-wss.on("connection", (ws) => {
-  console.log("🔗 Usuario conectado");
+// ===== Socket.IO =====
+io.on("connection", socket => {
+  console.log("🔗 Usuario conectado:", socket.id);
   
   // Enviar historial
   db.all(
-    "SELECT text FROM messages ORDER BY id ASC LIMIT 100",
+    "SELECT text, timestamp FROM messages ORDER BY id ASC LIMIT 100",
     [],
-    (err, rows) => {
-      if (!err) {
-        rows.forEach(row => {
-          ws.send(String(row.text));
+    (_, rows) => {
+      rows.forEach(row => {
+        socket.emit("message", {
+          text: row.text,
+          time: row.timestamp,
+          me: false
         });
-      }
+      });
     }
   );
   
-  ws.on("message", (msg) => {
-    const text = msg.toString();
-    console.log("💬 Mensaje:", text);
+  socket.on("message", data => {
+    const time = Date.now();
     
-    // Guardar
-    db.run("INSERT INTO messages (text) VALUES (?)", [text]);
+    db.run(
+      "INSERT INTO messages (text, timestamp) VALUES (?, ?)",
+      [data.text, time]
+    );
     
-    // Broadcast
-    wss.clients.forEach(client => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(String(text));
-      }
+    io.sockets.sockets.forEach(s => {
+      s.emit("message", {
+        text: data.text,
+        time,
+        me: s.id === socket.id
+      });
     });
   });
   
-  ws.on("close", () => {
-    console.log("❌ Usuario desconectado");
+  socket.on("disconnect", () => {
+    console.log("❌ Usuario desconectado:", socket.id);
   });
 });
 
-// ===== Start =====
 server.listen(PORT, "0.0.0.0", () => {
   console.log("🚀 Servidor escuchando en puerto", PORT);
 });
