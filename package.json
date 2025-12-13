@@ -1,21 +1,15 @@
 {
   "name": "whatschat",
   "version": "1.0.0",
-  "description": "Chat estilo WhatsApp en tiempo real",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
-    "build": "npm install"
+    "start": "node app.js"
   },
   "dependencies": {
     "express": "^4.18.2",
     "socket.io": "^4.5.4"
   },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
-  },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=14"
   }
 }
