@@ -143,59 +143,169 @@ body {
 </div>
 
 <script>
-const protocol = location.protocol === "https:" ? "wss" : "ws";
-const ws = new WebSocket(`${protocol}://${location.host}`);
-
-const mensajes = document.getElementById("mensajes");
-const input = document.getElementById("input");
-const btn = document.getElementById("btn");
-
-let lastSent = null;
-
-ws.onmessage = async (event) => {
-  const text = typeof event.data === "string"
-    ? event.data
-    : await event.data.text();
-
-  if (text === lastSent) return;
-
-  render(text, "other");
-};
-
-btn.onclick = send;
-input.addEventListener("keydown", e => {
-  if (e.key === "Enter") send();
-});
-
-function send() {
-  const text = input.value.trim();
-  if (!text) return;
-
-  lastSent = text;
-  render(text, "me");
-  ws.send(text);
-  input.value = "";
-}
-
-function render(text, type) {
-  const div = document.createElement("div");
-  div.className = `message ${type}`;
-
-  const msg = document.createElement("div");
-  msg.textContent = text;
-
-  const time = document.createElement("div");
-  time.className = "time";
-  time.textContent = new Date().toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit"
+  // WebSocket connection
+  const protocol = location.protocol === "https:" ? "wss" : "ws";
+  const ws = new WebSocket(`${protocol}://${location.host}`);
+  
+  // Elementos DOM
+  const mensajesContainer = document.getElementById('mensajes');
+  const input = document.getElementById('input');
+  const btn = document.getElementById('btn');
+  const statusText = document.getElementById('statusText');
+  const userCount = document.getElementById('userCount');
+  const connectionStatus = document.getElementById('connectionStatus');
+  
+  // Variables de estado
+  let userName = `Usuario${Math.floor(Math.random() * 1000)}`;
+  let userColor = generateColor();
+  
+  // Generar color único para el usuario
+  function generateColor() {
+    const colors = [
+      '#FF6B6B', '#4ECDC4', '#FFD166', '#06D6A0',
+      '#118AB2', '#EF476F', '#073B4C', '#7209B7'
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+  
+  // Formatear hora actual
+  function getCurrentTime() {
+    const now = new Date();
+    return now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+  }
+  
+  // Crear burbuja de mensaje
+  function createMessageBubble(text, isSent = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
+    
+    const bubbleDiv = document.createElement('div');
+    bubbleDiv.className = 'message-bubble';
+    
+    const textDiv = document.createElement('div');
+    textDiv.className = 'message-text';
+    textDiv.textContent = text;
+    
+    const timeDiv = document.createElement('div');
+    timeDiv.className = 'message-time';
+    timeDiv.textContent = getCurrentTime();
+    
+    // Si es mensaje recibido Y tiene formato "nombre: texto", separarlos
+    if (!isSent && text.includes(': ')) {
+      const userDiv = document.createElement('div');
+      const parts = text.split(': ');
+      const senderName = parts[0];
+      const messageText = parts.slice(1).join(': ');
+      
+      userDiv.className = 'message-user';
+      userDiv.textContent = senderName;
+      userDiv.style.color = userColor;
+      userDiv.style.fontSize = '12px';
+      userDiv.style.fontWeight = 'bold';
+      userDiv.style.marginBottom = '3px';
+      bubbleDiv.insertBefore(userDiv, textDiv);
+      
+      // Mostrar solo el texto del mensaje (sin el nombre)
+      textDiv.textContent = messageText;
+    }
+    
+    bubbleDiv.appendChild(textDiv);
+    bubbleDiv.appendChild(timeDiv);
+    messageDiv.appendChild(bubbleDiv);
+    
+    return messageDiv;
+  }
+  
+  // Eventos WebSocket
+  ws.onopen = () => {
+    console.log("✅ WebSocket conectado");
+    statusText.textContent = 'Conectado';
+    connectionStatus.style.background = 'rgba(76, 175, 80, 0.9)';
+    
+    // Enviar mensaje de unirse (opcional, si quieres notificar a otros)
+    // const joinMessage = `${userName} se ha unido al chat`;
+    // ws.send(joinMessage);
+    
+    // Mostrar mensaje de bienvenida local
+    const welcomeDiv = createMessageBubble('¡Bienvenido a WhatsChat! Los mensajes persisten hasta que el servidor se reinicie.', false);
+    mensajesContainer.appendChild(welcomeDiv);
+    mensajesContainer.scrollTop = mensajesContainer.scrollHeight;
+  };
+  
+  ws.onerror = (e) => {
+    console.error("❌ WebSocket error", e);
+    statusText.textContent = 'Error de conexión';
+    connectionStatus.style.background = 'rgba(244, 67, 54, 0.9)';
+  };
+  
+  ws.onclose = () => {
+    console.log("🔌 WebSocket cerrado");
+    statusText.textContent = 'Desconectado';
+    connectionStatus.style.background = 'rgba(158, 158, 158, 0.9)';
+  };
+  
+  // CORRECCIÓN CLAVE: Manejo de mensajes entrantes e historial
+  ws.onmessage = async (event) => {
+    const rawText = typeof event.data === "string" ? event.data : await event.data.text();
+    
+    // Determinar si el mensaje es propio
+    const isOwnMessage = rawText.startsWith(`${userName}: `);
+    
+    // Mostrar TODOS los mensajes, excepto la notificación de unión propia
+    if (rawText === `${userName} se ha unido al chat`) {
+      return; // No mostrar nuestra propia notificación de unión
+    }
+    
+    const messageDiv = createMessageBubble(rawText, isOwnMessage);
+    mensajesContainer.appendChild(messageDiv);
+    mensajesContainer.scrollTop = mensajesContainer.scrollHeight;
+  };
+  
+  // Enviar mensaje
+  function sendMessage() {
+    const texto = input.value.trim();
+    if (texto !== "") {
+      // Crear mensaje con nombre de usuario
+      const fullMessage = `${userName}: ${texto}`;
+      
+      // Mostrar mensaje propio inmediatamente (feedback local)
+      const messageDiv = createMessageBubble(fullMessage, true);
+      mensajesContainer.appendChild(messageDiv);
+      mensajesContainer.scrollTop = mensajesContainer.scrollHeight;
+      
+      // Enviar al servidor para almacenamiento y broadcast
+      ws.send(fullMessage);
+      input.value = "";
+      input.focus();
+    }
+  }
+  
+  // Event listeners
+  btn.onclick = sendMessage;
+  input.onkeypress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      sendMessage();
+      e.preventDefault();
+    }
+  };
+  
+  // Cargar nombre de usuario
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedName = localStorage.getItem('chatUsername');
+    if (savedName) {
+      userName = savedName;
+    } else {
+      localStorage.setItem('chatUsername', userName);
+    }
+    userCount.textContent = "1 usuario conectado";
   });
-
-  div.appendChild(msg);
-  div.appendChild(time);
-  mensajes.appendChild(div);
-  mensajes.scrollTop = mensajes.scrollHeight;
-}
+  
+  // Scroll al final al cargar
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      mensajesContainer.scrollTop = mensajesContainer.scrollHeight;
+    }, 300);
+  });
 </script>
 
 </body>
