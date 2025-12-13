@@ -197,24 +197,27 @@ body {
     }
 
     function render(text, me, time) {
-      const div = document.createElement("div");
-      div.className = `message ${me ? "me" : "other"}`;
-
-      const msg = document.createElement("div");
-      msg.textContent = text;
-
-      const t = document.createElement("div");
-      t.className = "time";
-      t.textContent = new Date(time).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-
-      div.appendChild(msg);
-      div.appendChild(t);
-      mensajes.appendChild(div);
-      mensajes.scrollTop = mensajes.scrollHeight;
-    }
+  const div = document.createElement("div");
+  div.className = `message ${me ? "me" : "other"}`;
+  
+  const msg = document.createElement("div");
+  msg.textContent = text;
+  
+  const t = document.createElement("div");
+  t.className = "time";
+  
+  const date = time ? new Date(Number(time)) : new Date();
+  
+  t.textContent = date.toLocaleTimeString("es-AR", {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+  
+  div.appendChild(msg);
+  div.appendChild(t);
+  mensajes.appendChild(div);
+  mensajes.scrollTop = mensajes.scrollHeight;
+}
   </script>
 </body>
 </html>
