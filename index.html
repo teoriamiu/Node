@@ -1,763 +1,221 @@
 <!DOCTYPE html>
 <html lang="es">
-
+  
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="theme-color" content="#075e54">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>WhatsChat | Mensajería Simple y Rápida 💬</title>
   
   <meta name="description" content="WhatsChat: Chatea con tus amigos y familiares con una interfaz familiar y fácil de usar. ¡Conéctate de forma instantánea y segura!">
   <meta name="keywords" content="WhatsChat, Chat, Mensajería, Social, Comunicación, Amigos, Mensajes, WhatsApp Style">
   <meta name="author" content="Agustín Díaz">
+  <meta name="robots" content="index, follow">
   
-  <link rel="icon" href="https://i.imgur.com/RtN3nkM.jpeg">
+  <link rel="canonical" href="https://whatschat-ix08.onrender.com/"> 
   
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <link rel="icon" href="https://i.imgur.com/RtN3nkM.jpeg"> 
+  
+  <meta property="og:title" content="WhatsChat: La Mensajería que Conoces 🟢">
+  <meta property="og:description" content="Una aplicación de chat rápida y privada con el diseño que ya amas. Envía mensajes, fotos y audios al instante.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://i.imgur.com/RtN3nkM.jpeg"> 
+  <meta property="og:url" content="https://whatschat-ix08.onrender.com/"> <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="WhatsChat: Chatea Ya Mismo 👋">
+  <meta name="twitter:description" content="Comunícate sin complicaciones. Disfruta de una experiencia de chat intuitiva y enfocada en lo que importa: tus conversaciones.">
+  <meta name="twitter:image" content="https://i.imgur.com/RtN3nkM.jpeg"> 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    :root {
-      --whatsapp-green: #075e54;
-      --whatsapp-light-green: #128c7e;
-      --whatsapp-teal-green: #25d366;
-      --whatsapp-chat-bg: #efeae2;
-      --whatsapp-message-out: #dcf8c6;
-      --whatsapp-message-in: #ffffff;
-      --whatsapp-timestamp: #667781;
-      --whatsapp-input-bg: #f0f2f5;
-      --whatsapp-border: #d1d7db;
-      --whatsapp-icon: #54656f;
-      --whatsapp-header-bg: #008069;
-      --whatsapp-encryption: #8696a0;
-    }
+/* ===== Body ===== */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Arial, sans-serif;
+  height: 100vh;
+}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #111b21;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
+/* ===== App container ===== */
+.app {
+  width: 100%;
+  height: 100vh;
+  background: #efeae2;
+  display: flex;
+  flex-direction: column;
+}
 
-    /* WhatsApp Main Container */
-    .whatsapp-container {
-      width: 100%;
-      max-width: 500px;
-      height: 100vh;
-      background: var(--whatsapp-chat-bg);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
+/* ===== Desktop: fullscreen ===== */
+@media (min-width: 768px) {
+  .app {
+    max-width: none;
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
 
-    @media (min-width: 768px) {
-      .whatsapp-container {
-        height: 90vh;
-        max-height: 900px;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 6px 24px rgba(0,0,0,0.3);
-      }
-    }
+/* ===== Header ===== */
+.header {
+  height: 56px;
+  background: #fff;
+  color: #000;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-weight: 600;
+  font-size: 16px;
+}
 
-    /* WhatsApp Header */
-    .whatsapp-header {
-      background: var(--whatsapp-header-bg);
-      padding: 16px 16px 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: relative;
-      z-index: 100;
-    }
+/* ===== Messages ===== */
+.messages {
+  flex: 1;
+  padding: 12px 10px;
+  overflow-y: auto;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23efeae2"/><path d="M0 0h100v100H0z" fill="none"/></svg>');
+}
 
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      flex: 1;
-    }
+/* ===== Message bubbles ===== */
+.message {
+  max-width: 78%;
+  margin-bottom: 8px;
+  padding: 6px 8px 18px;
+  font-size: 14px;
+  line-height: 1.35;
+  border-radius: 7.5px;
+  position: relative;
+  word-wrap: break-word;
+  box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+}
 
-    .back-button {
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
-      padding: 4px;
-    }
+.message.me {
+  background: #dcf8c6;
+  margin-left: auto;
+  border-bottom-right-radius: 0;
+}
 
-    .chat-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #667781, #54656f);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 500;
-      font-size: 18px;
-    }
+.message.other {
+  background: #ffffff;
+  margin-right: auto;
+  border-bottom-left-radius: 0;
+}
 
-    .chat-info {
-      flex: 1;
-    }
+/* ===== Time ===== */
+.time {
+  position: absolute;
+  right: 6px;
+  bottom: 3px;
+  font-size: 11px;
+  color: #667781;
+  white-space: nowrap;
+}
 
-    .chat-name {
-      color: white;
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
+/* ===== Input bar ===== */
+.input-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23efeae2"/><path d="M0 0h100v100H0z" fill="none"/></svg>');
+}
 
-    .chat-status {
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 13px;
-      font-weight: 400;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
+.input-bar input {
+  flex: 1;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  padding: 0 48px 0 14px;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+}
 
-    .online-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--whatsapp-teal-green);
-      border-radius: 50%;
-    }
+/* ===== Send button ===== */
+#send {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  border: none;
+  background: green; /* WhatsApp green */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
 
-    .header-right {
-      display: flex;
-      gap: 20px;
-      color: white;
-      font-size: 20px;
-    }
-
-    .header-icon {
-      cursor: pointer;
-    }
-
-    /* Encryption Message */
-    .encryption-notice {
-      background: #f0f2f5;
-      padding: 14px 16px;
-      text-align: center;
-      border-bottom: 1px solid var(--whatsapp-border);
-    }
-
-    .encryption-text {
-      color: var(--whatsapp-encryption);
-      font-size: 13px;
-      line-height: 1.4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .encryption-icon {
-      color: var(--whatsapp-timestamp);
-      font-size: 14px;
-    }
-
-    .encryption-link {
-      color: var(--whatsapp-light-green);
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .encryption-link:hover {
-      text-decoration: underline;
-    }
-
-    /* Date Separator */
-    .date-separator {
-      text-align: center;
-      margin: 20px 0;
-      position: relative;
-    }
-
-    .date-badge {
-      background: rgba(225, 245, 254, 0.92);
-      padding: 5px 12px;
-      border-radius: 15px;
-      font-size: 12.5px;
-      color: var(--whatsapp-timestamp);
-      display: inline-block;
-      box-shadow: 0 1px 1px rgba(0,0,0,0.08);
-    }
-
-    /* Messages Container */
-    .messages-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0 16px;
-      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23a1b7c2' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");
-      background-color: var(--whatsapp-chat-bg);
-      background-attachment: fixed;
-    }
-
-    /* WhatsApp Message Bubbles */
-    .message-wrapper {
-      margin: 4px 0;
-      max-width: 75%;
-      position: relative;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .message-wrapper.outgoing {
-      align-self: flex-end;
-      margin-left: auto;
-    }
-
-    .message-wrapper.incoming {
-      align-self: flex-start;
-      margin-right: auto;
-    }
-
-    .message-bubble {
-      padding: 8px 9px 8px 9px;
-      border-radius: 7.5px;
-      position: relative;
-      word-wrap: break-word;
-      font-size: 14.2px;
-      line-height: 19px;
-      box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
-    }
-
-    .outgoing .message-bubble {
-      background: var(--whatsapp-message-out);
-      border-bottom-right-radius: 5px;
-      margin-left: auto;
-    }
-
-    .incoming .message-bubble {
-      background: var(--whatsapp-message-in);
-      border-bottom-left-radius: 5px;
-      margin-right: auto;
-    }
-
-    /* Tail for message bubbles */
-    .outgoing .message-bubble::after {
-      content: '';
-      position: absolute;
-      right: -8px;
-      bottom: 0;
-      width: 0;
-      height: 0;
-      border-left: 8px solid var(--whatsapp-message-out);
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent;
-    }
-
-    .incoming .message-bubble::before {
-      content: '';
-      position: absolute;
-      left: -8px;
-      bottom: 0;
-      width: 0;
-      height: 0;
-      border-right: 8px solid var(--whatsapp-message-in);
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent;
-    }
-
-    /* Message metadata */
-    .message-meta {
-      text-align: right;
-      margin-top: 2px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 4px;
-      padding-right: 2px;
-    }
-
-    .message-time {
-      font-size: 11px;
-      color: var(--whatsapp-timestamp);
-      display: inline-block;
-    }
-
-    .outgoing .message-time {
-      color: #4a9b5e;
-    }
-
-    .status-icon {
-      font-size: 12px;
-      color: #4a9b5e;
-    }
-
-    /* Input Area - WhatsApp Style */
-    .input-container {
-      background: var(--whatsapp-input-bg);
-      padding: 8px 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-top: 1px solid var(--whatsapp-border);
-    }
-
-    .input-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--whatsapp-icon);
-    }
-
-    .input-action {
-      cursor: pointer;
-      font-size: 24px;
-      padding: 8px;
-      border-radius: 50%;
-      transition: background 0.2s;
-    }
-
-    .input-action:hover {
-      background: rgba(0,0,0,0.05);
-    }
-
-    .message-input-wrapper {
-      flex: 1;
-      display: flex;
-      background: white;
-      border-radius: 20px;
-      padding: 2px 2px 2px 16px;
-      align-items: center;
-    }
-
-    .message-input {
-      flex: 1;
-      border: none;
-      outline: none;
-      font-size: 15px;
-      padding: 10px 0;
-      background: transparent;
-      font-family: inherit;
-    }
-
-    .message-input::placeholder {
-      color: #9ca0a4;
-    }
-
-    .send-button {
-      background: var(--whatsapp-light-green);
-      color: white;
-      border: none;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin-left: 8px;
-    }
-
-    .send-button:hover {
-      background: var(--whatsapp-green);
-    }
-
-    .send-icon {
-      font-size: 20px;
-      transform: rotate(0deg);
-    }
-
-    /* Scrollbar */
-    .messages-container::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .messages-container::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .messages-container::-webkit-scrollbar-thumb {
-      background: rgba(0,0,0,0.2);
-      border-radius: 3px;
-    }
-
-    .messages-container::-webkit-scrollbar-thumb:hover {
-      background: rgba(0,0,0,0.3);
-    }
-
-    /* Welcome State */
-    .welcome-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      padding: 40px 20px;
-      text-align: center;
-      background: var(--whatsapp-chat-bg);
-    }
-
-    .welcome-icon {
-      font-size: 64px;
-      color: var(--whatsapp-light-green);
-      margin-bottom: 20px;
-      opacity: 0.8;
-    }
-
-    .welcome-title {
-      font-size: 32px;
-      color: var(--whatsapp-green);
-      margin-bottom: 8px;
-      font-weight: 300;
-    }
-
-    .welcome-subtitle {
-      color: var(--whatsapp-timestamp);
-      font-size: 14px;
-      line-height: 1.5;
-      max-width: 400px;
-    }
-
-    /* Loading */
-    .loading {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-    }
-
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(7, 94, 84, 0.2);
-      border-top-color: var(--whatsapp-light-green);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Typing Indicator */
-    .typing-indicator {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 10px 15px;
-      background: white;
-      border-radius: 10px;
-      width: fit-content;
-      margin: 4px 0;
-      box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
-    }
-
-    .typing-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--whatsapp-icon);
-      border-radius: 50%;
-      animation: typing 1.4s infinite ease-in-out;
-    }
-
-    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-
-    @keyframes typing {
-      0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
-      40% { transform: scale(1); opacity: 1; }
-    }
-
-    /* Empty State */
-    .empty-state {
-      text-align: center;
-      color: var(--whatsapp-timestamp);
-      font-size: 14px;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
-      margin: 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
+#send svg {
+  width: 19px;
+  height: 19px;
+  fill: white;
+}
   </style>
 </head>
-
 <body>
-  <div class="whatsapp-container">
-    <!-- WhatsApp Header -->
-    <div class="whatsapp-header">
-      <div class="header-left">
-        <div class="back-button">
-          <i class="fas fa-arrow-left"></i>
-        </div>
-        <div class="chat-avatar">
-          <i class="fas fa-user-friends"></i>
-        </div>
-        <div class="chat-info">
-          <div class="chat-name">WhatsChat</div>
-          <div class="chat-status">
-            <span class="online-dot"></span>
-            <span id="onlineCount">en línea</span>
-          </div>
-        </div>
-      </div>
-      <div class="header-right">
-        <div class="header-icon">
-          <i class="fas fa-video"></i>
-        </div>
-        <div class="header-icon">
-          <i class="fas fa-phone"></i>
-        </div>
-        <div class="header-icon">
-          <i class="fas fa-ellipsis-v"></i>
-        </div>
-      </div>
-    </div>
+  <div class="app">
+    <div class="header">WhatsChat</div>
 
-    <!-- Encryption Notice -->
-    <div class="encryption-notice">
-      <div class="encryption-text">
-        <i class="fas fa-lock encryption-icon"></i>
-        <span>Los mensajes y las llamadas están cifrados de extremo a extremo. Nadie fuera de este chat puede leerlos o escucharlos, ni siquiera WhatsChat.</span>
-        <a class="encryption-link">Obtén más información.</a>
-      </div>
-    </div>
+    <div id="mensajes" class="messages"></div>
 
-    <!-- Messages Container -->
-    <div id="messages" class="messages-container">
-      <!-- Date Separator -->
-      <div class="date-separator">
-        <div class="date-badge">HOY</div>
-      </div>
-
-      <!-- Messages will be inserted here -->
-      
-      <!-- Welcome State (shown when no messages) -->
-      <div class="welcome-state" id="welcomeState">
-        <div class="welcome-icon">
-          <i class="fas fa-comments"></i>
-        </div>
-        <h1 class="welcome-title">WhatsChat</h1>
-        <p class="welcome-subtitle">
-          Envía y recibe mensajes sin necesidad de tener tu teléfono conectado.<br>
-          Usa WhatsChat en hasta 4 dispositivos vinculados y 1 teléfono al mismo tiempo.
-        </p>
-      </div>
-    </div>
-
-    <!-- Input Area -->
-    <div class="input-container">
-      <div class="input-actions">
-        <div class="input-action">
-          <i class="fas fa-plus-circle"></i>
-        </div>
-        <div class="input-action">
-          <i class="fas fa-camera"></i>
-        </div>
-      </div>
-      
-      <div class="message-input-wrapper">
-        <input 
-          type="text" 
-          id="input" 
-          class="message-input" 
-          placeholder="Escribe un mensaje aquí"
-          autocomplete="off"
-          maxlength="1000"
-        >
-        <button id="btn" class="send-button">
-          <i class="fas fa-paper-plane send-icon"></i>
-        </button>
-      </div>
-      
-      <div class="input-actions">
-        <div class="input-action">
-          <i class="fas fa-microphone"></i>
-        </div>
-      </div>
+    <div class="input-bar">
+      <input id="input" type="text" placeholder="Escribí un mensaje…" autocomplete="off" />
+      <button id="send">
+              <svg viewBox="0 0 20 24">
+        <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" />
+      </svg>
+      </button>
     </div>
   </div>
 
-  <!-- Socket.IO -->
+  <!-- Socket.IO (NO MODIFICAR BACKEND) -->
   <script src="/socket.io/socket.io.js"></script>
-
   <script>
     const socket = io();
-    const messagesContainer = document.getElementById('messages');
-    const input = document.getElementById('input');
-    const btn = document.getElementById('btn');
-    const onlineCountElement = document.getElementById('onlineCount');
-    const welcomeState = document.getElementById('welcomeState');
 
-    // Keep track of message count
-    let messageCount = 0;
+    const mensajes = document.getElementById("mensajes");
+    const input = document.getElementById("input");
+    const btn = document.getElementById("btn");
 
-    // Format time as HH:MM
-    function formatTime(timestamp) {
-      const date = new Date(timestamp);
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
+    socket.on("message", data => {
+      render(data.text, data.me, data.time);
+    });
 
-    // Get today's date in Spanish
-    function getTodayDate() {
-      return new Date().toLocaleDateString('es-ES', { 
-        weekday: 'long', 
-        day: 'numeric', 
-        month: 'long' 
-      }).toUpperCase();
-    }
+    btn.onclick = send;
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter") send();
+    });
 
-    // Render a message
-    function renderMessage(text, isOutgoing, timestamp) {
-      // Hide welcome state when first message arrives
-      if (messageCount === 0 && welcomeState) {
-        welcomeState.style.display = 'none';
-      }
-
-      const messageDiv = document.createElement('div');
-      messageDiv.className = `message-wrapper ${isOutgoing ? 'outgoing' : 'incoming'}`;
-      
-      const timeString = formatTime(timestamp);
-      
-      messageDiv.innerHTML = `
-        <div class="message-bubble">
-          ${escapeHtml(text)}
-          <div class="message-meta">
-            <span class="message-time">${timeString}</span>
-            ${isOutgoing ? '<i class="fas fa-check-double status-icon"></i>' : ''}
-          </div>
-        </div>
-      `;
-      
-      messagesContainer.appendChild(messageDiv);
-      scrollToBottom();
-      messageCount++;
-    }
-
-    // Escape HTML to prevent XSS
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    // Scroll to bottom of messages
-    function scrollToBottom() {
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-
-    // Send message
-    function sendMessage() {
+    function send() {
       const text = input.value.trim();
       if (!text) return;
 
-      const time = Date.now();
-      
-      // Immediately render own message (optimistic UI)
-      renderMessage(text, true, time);
-      
-      // Send to server
-      socket.emit('message', { text });
-      
-      // Clear input and focus
-      input.value = '';
-      input.focus();
+      socket.emit("message", { text });
+      input.value = "";
     }
 
-    // Receive message from server
-    socket.on('message', data => {
-      renderMessage(data.text, data.me, data.time);
-    });
+    function render(text, me, time) {
+      const div = document.createElement("div");
+      div.className = `message ${me ? "me" : "other"}`;
 
-    // Update online users count
-    let onlineUsers = 1;
-    socket.on('user connected', () => {
-      onlineUsers++;
-      updateOnlineStatus();
-    });
+      const msg = document.createElement("div");
+      msg.textContent = text;
 
-    socket.on('user disconnected', () => {
-      onlineUsers = Math.max(1, onlineUsers - 1);
-      updateOnlineStatus();
-    });
+      const t = document.createElement("div");
+      t.className = "time";
+      t.textContent = new Date(time).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
 
-    function updateOnlineStatus() {
-      const status = onlineUsers === 1 ? 'en línea' : `${onlineUsers} en línea`;
-      onlineCountElement.textContent = status;
+      div.appendChild(msg);
+      div.appendChild(t);
+      mensajes.appendChild(div);
+      mensajes.scrollTop = mensajes.scrollHeight;
     }
-
-    // Event listeners
-    btn.onclick = sendMessage;
-    
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
-
-    // Auto-focus input on page load
-    window.addEventListener('load', () => {
-      input.focus();
-      // Update date badge
-      const dateBadge = document.querySelector('.date-badge');
-      if (dateBadge) {
-        dateBadge.textContent = getTodayDate();
-      }
-    });
-
-    // Handle back button
-    document.querySelector('.back-button').addEventListener('click', () => {
-      // In a real app, this would go back to chats list
-      console.log('Back button clicked');
-    });
-
-    // Handle connection status
-    socket.on('connect_error', () => {
-      console.error('Connection error');
-      onlineCountElement.textContent = 'conectando...';
-    });
-
-    socket.on('reconnect', () => {
-      console.log('Reconnected to server');
-      onlineCountElement.textContent = 'en línea';
-    });
-
-    // Add some sample messages for demo
-    window.addEventListener('DOMContentLoaded', () => {
-      // These are just for demo - they won't appear in production
-      // since messages come from server
-      setTimeout(() => {
-        if (messageCount === 0) {
-          // Show demo messages only if no real messages exist
-          const welcomeMessages = [
-            { text: "¡Bienvenido a WhatsChat! 👋", outgoing: false },
-            { text: "Envía un mensaje para comenzar a chatear", outgoing: false }
-          ];
-          
-          welcomeMessages.forEach((msg, i) => {
-            setTimeout(() => {
-              renderMessage(msg.text, msg.outgoing, Date.now() - (welcomeMessages.length - i) * 1000);
-            }, i * 500);
-          });
-        }
-      }, 1000);
-    });
   </script>
 </body>
 </html>
