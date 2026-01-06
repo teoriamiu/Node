@@ -1,105 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-
-  <!-- DESCRIPCIÓN SEMÁNTICA DEL DOCUMENTO -->
-  <meta name="description"
-        content="Aplicación web educativa construida con Node.js que demuestra backend, frontend y comunicación en tiempo real con JavaScript">
-
-  <meta name="keywords"
-        content="Node.js, JavaScript, backend, servidor, WebSockets, Socket.IO, programación web, tiempo real">
-
-  <meta name="author" content="Clase de Programación">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- SOPORTE DE ESQUEMAS DE COLOR -->
-  <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#1e1e1e">
-
-  <!-- URL CANÓNICA -->
-  <link rel="canonical" href="https://whatschat-ix08.onrender.com/">
-
-  <!-- FAVICON -->
-  <link rel="icon" href="https://i.imgur.com/F9CqhP3.jpeg">
-
-  <!-- OPEN GRAPH (REDES SOCIALES) -->
-  <meta property="og:title"
-        content="Clase completa de Node.js">
-
-  <meta property="og:description"
-        content="Aplicación web educativa servida con Node.js que demuestra comunicación en tiempo real y arquitectura web moderna">
-
-  <meta property="og:image" content="https://i.imgur.com/F9CqhP3.jpeg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt"
-        content="Clase práctica de Node.js con JavaScript y comunicación en tiempo real">
-
-  <meta property="og:url" content="https://whatschat-ix08.onrender.com/">
-  <meta property="og:type" content="website">
-
-  <title>Clase completa de Node.js</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.1.0/css/all.min.css"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.54.0-dev-20250930/min/vs/editor/editor.main.css"/>
-<style>
-:root { --toolbar-h: 42px; }
-* { box-sizing: border-box; }
-html, body, #root { margin: 0; height: 100%; }
-body { background: #111; font-family: system-ui, sans-serif; }
-h1 { margin: 0; font-size: 16px; color: #fff; font-weight: 600; }
-
-#app { display: flex; flex-direction: column; height: 100%; }
-#toolbar { height: var(--toolbar-h); display: flex; align-items: center; padding: 0 10px; background: #1e1e1e; }
-.toolbar-actions { margin-left: auto; display: flex; gap: 2px; }
-#toolbar button { background: #007acc; border: none; color: #fff; padding: 6px 8px; border-radius: 4px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; gap: 0; }
-#toolbar button:hover { background: #005a99; }
-
-#workspace { flex: 1; display: flex; flex-direction: row; overflow: hidden; min-height:0; }
-#workspace[data-view="editor"] #editor,
-#workspace[data-view="preview"] #preview,
-#workspace[data-view="split"] #editor,
-#workspace[data-view="split"] #preview { min-height:0; }
-
-#workspace[data-view="editor"] #editor { flex: 1; }
-#workspace[data-view="editor"] #preview { display: none; }
-
-#workspace[data-view="preview"] #preview { flex: 1; }
-#workspace[data-view="preview"] #editor { display: none; }
-
-#workspace[data-view="split"] #editor,
-#workspace[data-view="split"] #preview { flex: 1; display: block; }
-
-#workspace[data-view="split"] { flex-direction: row; }
-@media (max-width:768px){
-  #workspace[data-view="split"] { flex-direction: column; }
-}
-
-#editor { min-height: 0; }
-#preview { border: none; width: 100%; height: 100%; }
-
-#modalLoadHTML { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 9999; }
-#modalLoadHTML .modal-content { background: #1e1e1e; padding:16px; border-radius:8px; width:90%; max-width:700px; display:flex; flex-direction:column; gap:8px;color:white; }
-#modalLoadHTML textarea { width:100%; height:150px; background:#111; color:#fff; border:1px solid #444; border-radius:4px; font-family:monospace; padding:8px; resize:vertical; }
-#modalLoadHTML .modal-buttons { display:flex; justify-content:flex-end; gap:8px; }
-#modalLoadHTML button { padding:6px 12px; border-radius:4px; border:none; cursor:pointer; background:#007acc; color:#fff; }
-#modalLoadHTML button:hover { background:#005a99; }
-
-</style>
-</head>
-<body>
-<div id="root"></div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.0/umd/react.development.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.0/umd/react-dom.development.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.54.0-dev-20250930/min/vs/loader.js"></script>
-<script>
-const { useState, useEffect, useRef } = React;
-
-const initialHTML =
-  `<!DOCTYPE html>
-<html lang="es">
   
 <head>
   <meta charset="UTF-8">
@@ -114,12 +14,12 @@ const initialHTML =
   
   <link rel="canonical" href="https://whatschat-ix08.onrender.com/"> 
   
-  <link rel="icon" href="https://i.imgur.com/F9CqhP3.jpeg"> 
+  <link rel="icon" href="https://i.imgur.com/DZyJDVy.jpeg"> 
   
   <meta property="og:title" content="WhatsChat: La Mensajería que Conoces">
   <meta property="og:description" content="Una aplicación de chat rápida y privada con el diseño que ya amas. Envía mensajes, fotos y audios al instante.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://i.imgur.com/F9CqhP3.jpeg"> 
+  <meta property="og:image" content="https://i.imgur.com/DZyJDVy.jpeg"> 
   <meta property="og:url" content="https://whatschat-ix08.onrender.com/"> <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="WhatsChat: Chatea Ya Mismo 👋">
   <meta name="twitter:description" content="Comunícate sin complicaciones. Disfruta de una experiencia de chat intuitiva y enfocada en lo que importa: tus conversaciones.">
@@ -273,9 +173,9 @@ body {
   </div>
 
   <!-- Socket.IO (NO MODIFICAR BACKEND) -->
-<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"><\/script>
-<script>
-  const socket = io('https://whatschat-ix08.onrender.com');
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
 
     const mensajes = document.getElementById("mensajes");
     const input = document.getElementById("input");
@@ -300,7 +200,7 @@ body {
 
     function render(text, me, time) {
   const div = document.createElement("div");
-  div.className = "message " + (me ? "me" : "other");
+  div.className = `message ${me ? "me" : "other"}`;
   
   const msg = document.createElement("div");
   msg.textContent = text;
@@ -320,86 +220,6 @@ body {
   mensajes.appendChild(div);
   mensajes.scrollTop = mensajes.scrollHeight;
 }
-  <\/script>
-</body>
-</html>`;
-
-function App() {
-  const [view, setView] = useState('split');
-  const [modalOpen, setModalOpen] = useState(false);
-  const [textareaValue, setTextareaValue] = useState('');
-  const editorRef = useRef(null);
-  const iframeRef = useRef(null);
-
-  const renderPreview = (html) => {
-    if (iframeRef.current) iframeRef.current.srcdoc = html;
-  };
-
-  useEffect(() => {
-    require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.54.0-dev-20250930/min/vs' } });
-    require(['vs/editor/editor.main'], () => {
-      editorRef.current = monaco.editor.create(document.getElementById('editor'), {
-        value: initialHTML,
-        language: 'html',
-        theme: 'vs-dark',
-        wordWrap: 'on',
-        minimap: { enabled: true },
-        automaticLayout: true
-      });
-      renderPreview(initialHTML);
-      const debounce = (fn, delay=300) => { let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), delay); }; };
-      editorRef.current.onDidChangeModelContent(debounce(()=> renderPreview(editorRef.current.getValue()), 250));
-    });
-  }, []);
-
-  const openModal = () => {
-    setTextareaValue(editorRef.current.getValue());
-    setModalOpen(true);
-  };
-
-  const loadHTML = () => {
-    editorRef.current.setValue(textareaValue);
-    renderPreview(textareaValue);
-    setView('split');
-    setModalOpen(false);
-  };
-
-  const switchView = (newView) => {
-    setView(newView);
-    setTimeout(() => editorRef.current?.layout(), 50);
-  };
-
-  return (
-    React.createElement('div', {id:'app'},
-      React.createElement('div', {id:'toolbar'},
-        React.createElement('h1', null, 'Vs-Kode'),
-        React.createElement('div', {className:'toolbar-actions'},
-          React.createElement('button', {onClick:()=>switchView('split')}, React.createElement('i',{className:'fa-solid fa-columns'}), ' Split'),
-          React.createElement('button', {onClick:()=>switchView('editor')}, React.createElement('i',{className:'fa-solid fa-code'}), ' Editor'),
-          React.createElement('button', {onClick:()=>switchView('preview')}, React.createElement('i',{className:'fa-solid fa-eye'}), ' Preview'),
-          React.createElement('button', {onClick:openModal}, React.createElement('i',{className:'fa-solid fa-file-import'}), ' Cargar HTML')
-        )
-      ),
-      React.createElement('div', {id:'workspace', 'data-view':view},
-        React.createElement('div', {id:'editor'}),
-        React.createElement('iframe', {id:'preview', ref:iframeRef})
-      ),
-      modalOpen && React.createElement('div', {id:'modalLoadHTML', style:{display:'flex'}},
-        React.createElement('div', {className:'modal-content'},
-          React.createElement('h2', null, 'Pega tu HTML'),
-          React.createElement('textarea', {value:textareaValue, onChange:e=>setTextareaValue(e.target.value)}),
-          React.createElement('div', {className:'modal-buttons'},
-            React.createElement('button', {onClick:()=>setModalOpen(false)}, 'Cancelar'),
-            React.createElement('button', {onClick:loadHTML}, 'Cargar')
-          )
-        )
-      )
-    )
-  );
-}
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(React.createElement(App));
-</script>
+  </script>
 </body>
 </html>
