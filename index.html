@@ -2,59 +2,44 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-
-  <!-- DESCRIPCIÓN SEMÁNTICA DEL DOCUMENTO -->
-  <meta name="description"
-        content="Aplicación web educativa construida con Node.js que demuestra backend, frontend y comunicación en tiempo real con JavaScript">
-
-  <meta name="keywords"
-        content="Node.js, JavaScript, backend, servidor, WebSockets, Socket.IO, programación web, tiempo real">
-
+  <meta name="description" content="Aplicación web educativa construida con Node.js que demuestra backend, frontend y comunicación en tiempo real con JavaScript">
+  <meta name="keywords" content="Node.js, JavaScript, backend, servidor, WebSockets, Socket.IO, programación web, tiempo real">
   <meta name="author" content="Clase de Programación">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- SOPORTE DE ESQUEMAS DE COLOR -->
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#1e1e1e">
-
-  <!-- URL CANÓNICA -->
   <link rel="canonical" href="https://whatschat-ix08.onrender.com/">
-
-  <!-- FAVICON -->
   <link rel="icon" href="https://i.imgur.com/F9CqhP3.jpeg">
-
-  <!-- OPEN GRAPH (REDES SOCIALES) -->
-  <meta property="og:title"
-        content="Clase completa de Node.js">
-
-  <meta property="og:description"
-        content="Aplicación web educativa servida con Node.js que demuestra comunicación en tiempo real y arquitectura web moderna">
-
+  <meta property="og:title" content="Clase completa de Node.js">
+  <meta property="og:description" content="Aplicación web educativa servida con Node.js que demuestra comunicación en tiempo real y arquitectura web moderna">
   <meta property="og:image" content="https://i.imgur.com/F9CqhP3.jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt"
-        content="Clase práctica de Node.js con JavaScript y comunicación en tiempo real">
-
+  <meta property="og:image:alt" content="Clase práctica de Node.js con JavaScript y comunicación en tiempo real">
   <meta property="og:url" content="https://whatschat-ix08.onrender.com/">
   <meta property="og:type" content="website">
-
   <title>Clase completa de Node.js</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.1.0/css/all.min.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.54.0-dev-20250930/min/vs/editor/editor.main.css"/>
 <style>
-:root { --toolbar-h: 42px; }
+:root { --toolbar-h: 42px; --tabs-h: 35px; }
 * { box-sizing: border-box; }
 html, body, #root { margin: 0; height: 100%; }
 body { background: #111; font-family: system-ui, sans-serif; }
 h1 { margin: 0; font-size: 16px; color: #fff; font-weight: 600; }
 
 #app { display: flex; flex-direction: column; height: 100%; }
-#toolbar { height: var(--toolbar-h); display: flex; align-items: center; padding: 0 10px; background: #1e1e1e; }
+#toolbar { height: var(--toolbar-h); display: flex; align-items: center; padding: 0 10px; background: #1e1e1e; border-bottom: 1px solid #333; }
 .toolbar-actions { margin-left: auto; display: flex; gap: 2px; }
-#toolbar button { background: #007acc; border: none; color: #fff; padding: 6px 8px; border-radius: 4px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; gap: 0; }
+#toolbar button { background: #007acc; border: none; color: #fff; padding: 6px 8px; border-radius: 4px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; gap: 4px; }
 #toolbar button:hover { background: #005a99; }
+
+#tabs { height: var(--tabs-h); background: #252526; display: flex; align-items: flex-end; padding: 0 8px; border-bottom: 1px solid #333; overflow-x: auto; }
+.tab { padding: 6px 12px; background: #2d2d30; color: #969696; border: none; cursor: pointer; font-size: 13px; border-top-left-radius: 4px; border-top-right-radius: 4px; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.tab:hover { background: #1e1e1e; color: #ccc; }
+.tab.active { background: #1e1e1e; color: #fff; border-bottom: 2px solid #007acc; }
+.tab i { font-size: 11px; }
 
 #workspace { flex: 1; display: flex; flex-direction: row; overflow: hidden; min-height:0; }
 #workspace[data-view="editor"] #editor,
@@ -77,7 +62,7 @@ h1 { margin: 0; font-size: 16px; color: #fff; font-weight: 600; }
 }
 
 #editor { min-height: 0; }
-#preview { border: none; width: 100%; height: 100%; }
+#preview { border: none; width: 100%; height: 100%; background: #fff; }
 
 #modalLoadHTML { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 9999; }
 #modalLoadHTML .modal-content { background: #1e1e1e; padding:16px; border-radius:8px; width:90%; max-width:700px; display:flex; flex-direction:column; gap:8px;color:white; }
@@ -85,7 +70,6 @@ h1 { margin: 0; font-size: 16px; color: #fff; font-weight: 600; }
 #modalLoadHTML .modal-buttons { display:flex; justify-content:flex-end; gap:8px; }
 #modalLoadHTML button { padding:6px 12px; border-radius:4px; border:none; cursor:pointer; background:#007acc; color:#fff; }
 #modalLoadHTML button:hover { background:#005a99; }
-
 </style>
 </head>
 <body>
@@ -97,8 +81,11 @@ h1 { margin: 0; font-size: 16px; color: #fff; font-weight: 600; }
 <script>
 const { useState, useEffect, useRef } = React;
 
-const initialHTML =
-  `<!DOCTYPE html>
+const FILES = {
+  'index.html': {
+    language: 'html',
+    icon: 'fa-brands fa-html5',
+    content: `<!DOCTYPE html>
 <html lang="es">
   
 <head>
@@ -322,10 +309,120 @@ body {
 }
   <\/script>
 </body>
-</html>`;
+</html>`
+  },
+  'app.js': {
+    language: 'javascript',
+    icon: 'fa-brands fa-node-js',
+    content: `const express = require("express");
+const path = require("path");
+const http = require("http");
+const { Server } = require("socket.io");
+const { Pool } = require("pg");
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+const PORT = process.env.PORT || 3000;
+
+// ===== PostgreSQL =====
+const pool = new Pool({
+connectionString: process.env.DATABASE_URL,
+ssl: process.env.NODE_ENV === "production" ?
+{ rejectUnauthorized: false } :
+false
+});
+
+(async () => {
+await pool.query(\`
+CREATE TABLE IF NOT EXISTS messages (
+id SERIAL PRIMARY KEY,
+text TEXT NOT NULL,
+timestamp BIGINT NOT NULL
+)
+\`);
+console.log("🟢 Tabla messages lista");
+})();
+
+// ===== Express =====
+app.use(express.static(__dirname));
+
+app.get("/", (_, res) => {
+res.sendFile(path.join(__dirname, "index.html"));
+});
+
+// ===== Socket.IO =====
+io.on("connection", async socket => {
+console.log("🔗 Usuario conectado:", socket.id);
+
+// Enviar historial
+const { rows } = await pool.query(
+"SELECT text, timestamp FROM messages ORDER BY id ASC LIMIT 100"
+);
+
+rows.forEach(row => {
+socket.emit("message", {
+text: row.text,
+time: row.timestamp,
+me: false
+});
+});
+
+socket.on("message", async data => {
+const time = Date.now();
+
+await pool.query(
+"INSERT INTO messages (text, timestamp) VALUES ($1, $2)",
+[data.text, time]
+);
+
+io.sockets.sockets.forEach(s => {
+s.emit("message", {
+text: data.text,
+time,
+me: s.id === socket.id
+});
+});
+});
+
+socket.on("disconnect", () => {
+console.log("❌ Usuario desconectado:", socket.id);
+});
+});
+
+server.listen(PORT, "0.0.0.0", () => {
+console.log("🚀 Servidor escuchando en puerto", PORT);
+});`
+  },
+  'package.json': {
+    language: 'json',
+    icon: 'fa-solid fa-box',
+    content: `{
+  "name": "whatschat",
+  "version": "1.0.0",
+  "description": "Chat en tiempo real estilo WhatsApp con Socket.IO y SQLite",
+  "main": "app.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "4.19.2",
+    "socket.io": "4.8.1",
+    "pg": "8.11.5"
+  }
+}`
+  }
+};
 
 function App() {
   const [view, setView] = useState('split');
+  const [activeFile, setActiveFile] = useState('index.html');
+  const [files, setFiles] = useState(FILES);
   const [modalOpen, setModalOpen] = useState(false);
   const [textareaValue, setTextareaValue] = useState('');
   const editorRef = useRef(null);
@@ -339,27 +436,65 @@ function App() {
     require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.54.0-dev-20250930/min/vs' } });
     require(['vs/editor/editor.main'], () => {
       editorRef.current = monaco.editor.create(document.getElementById('editor'), {
-        value: initialHTML,
-        language: 'html',
+        value: FILES['index.html'].content,
+        language: FILES['index.html'].language,
         theme: 'vs-dark',
         wordWrap: 'on',
         minimap: { enabled: true },
         automaticLayout: true
       });
-      renderPreview(initialHTML);
-      const debounce = (fn, delay=300) => { let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), delay); }; };
-      editorRef.current.onDidChangeModelContent(debounce(()=> renderPreview(editorRef.current.getValue()), 250));
+      renderPreview(FILES['index.html'].content);
+      
+      const debounce = (fn, delay=300) => { 
+        let t; 
+        return (...args)=>{ 
+          clearTimeout(t); 
+          t=setTimeout(()=>fn(...args), delay); 
+        }; 
+      };
+      
+      editorRef.current.onDidChangeModelContent(debounce(()=> {
+        const newContent = editorRef.current.getValue();
+        setFiles(prev => ({
+          ...prev,
+          [activeFile]: { ...prev[activeFile], content: newContent }
+        }));
+        if (activeFile === 'index.html') {
+          renderPreview(newContent);
+        }
+      }, 250));
     });
   }, []);
 
+  const switchFile = (filename) => {
+    if (editorRef.current && filename !== activeFile) {
+      const file = files[filename];
+      const model = monaco.editor.createModel(file.content, file.language);
+      editorRef.current.setModel(model);
+      setActiveFile(filename);
+      
+      if (filename === 'index.html') {
+        renderPreview(file.content);
+      }
+    }
+  };
+
   const openModal = () => {
-    setTextareaValue(editorRef.current.getValue());
+    setTextareaValue(files[activeFile].content);
     setModalOpen(true);
   };
 
   const loadHTML = () => {
-    editorRef.current.setValue(textareaValue);
-    renderPreview(textareaValue);
+    setFiles(prev => ({
+      ...prev,
+      [activeFile]: { ...prev[activeFile], content: textareaValue }
+    }));
+    if (editorRef.current) {
+      editorRef.current.setValue(textareaValue);
+    }
+    if (activeFile === 'index.html') {
+      renderPreview(textareaValue);
+    }
     setView('split');
     setModalOpen(false);
   };
@@ -377,7 +512,19 @@ function App() {
           React.createElement('button', {onClick:()=>switchView('split')}, React.createElement('i',{className:'fa-solid fa-columns'}), ' Split'),
           React.createElement('button', {onClick:()=>switchView('editor')}, React.createElement('i',{className:'fa-solid fa-code'}), ' Editor'),
           React.createElement('button', {onClick:()=>switchView('preview')}, React.createElement('i',{className:'fa-solid fa-eye'}), ' Preview'),
-          React.createElement('button', {onClick:openModal}, React.createElement('i',{className:'fa-solid fa-file-import'}), ' Cargar HTML')
+          React.createElement('button', {onClick:openModal}, React.createElement('i',{className:'fa-solid fa-file-import'}), ' Cargar')
+        )
+      ),
+      React.createElement('div', {id:'tabs'},
+        Object.keys(files).map(filename =>
+          React.createElement('button', {
+            key: filename,
+            className: 'tab' + (activeFile === filename ? ' active' : ''),
+            onClick: () => switchFile(filename)
+          },
+            React.createElement('i', {className: files[filename].icon}),
+            filename
+          )
         )
       ),
       React.createElement('div', {id:'workspace', 'data-view':view},
@@ -386,11 +533,11 @@ function App() {
       ),
       modalOpen && React.createElement('div', {id:'modalLoadHTML', style:{display:'flex'}},
         React.createElement('div', {className:'modal-content'},
-          React.createElement('h2', null, 'Pega tu HTML'),
+          React.createElement('h2', null, 'Editar ' + activeFile),
           React.createElement('textarea', {value:textareaValue, onChange:e=>setTextareaValue(e.target.value)}),
           React.createElement('div', {className:'modal-buttons'},
             React.createElement('button', {onClick:()=>setModalOpen(false)}, 'Cancelar'),
-            React.createElement('button', {onClick:loadHTML}, 'Cargar')
+            React.createElement('button', {onClick:loadHTML}, 'Guardar')
           )
         )
       )
