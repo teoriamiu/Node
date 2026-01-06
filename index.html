@@ -82,9 +82,9 @@ h1 { margin: 0; font-size: 16px; color: #fff; font-weight: 600; }
 <body>
 <div id="root"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.0/umd/react.development.min.js"><\/script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.0/umd/react-dom.development.min.js"><\/script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.54.0-dev-20250930/min/vs/loader.js"><\/script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.0/umd/react.development.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.0/umd/react-dom.development.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.54.0-dev-20250930/min/vs/loader.js"></script>
 <script>
 const { useState, useEffect, useRef } = React;
 
@@ -264,9 +264,9 @@ body {
   </div>
 
   <!-- Socket.IO (NO MODIFICAR BACKEND) -->
-<script src="https://whatschat-ix08.onrender.com/socket.io/socket.io.js"><\/script>
-
-const socket = io("https://whatschat-ix08.onrender.com");
+  <script src="/socket.io/socket.io.js"><\/script>
+  <script>
+    const socket = io();
 
     const mensajes = document.getElementById("mensajes");
     const input = document.getElementById("input");
@@ -291,7 +291,7 @@ const socket = io("https://whatschat-ix08.onrender.com");
 
     function render(text, me, time) {
   const div = document.createElement("div");
-  div.className = `message ${me ? "me" : "other"}`;
+  div.className = "message " + (me ? "me" : "other");
   
   const msg = document.createElement("div");
   msg.textContent = text;
