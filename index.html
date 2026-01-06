@@ -273,9 +273,9 @@ body {
   </div>
 
   <!-- Socket.IO (NO MODIFICAR BACKEND) -->
-  <script src="/socket.io/socket.io.js"><\/script>
-  <script>
-    const socket = io();
+<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"><\/script>
+<script>
+  const socket = io('https://whatschat-ix08.onrender.com');
 
     const mensajes = document.getElementById("mensajes");
     const input = document.getElementById("input");
