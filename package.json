@@ -1,7 +1,7 @@
 {
   "name": "whatschat",
   "version": "1.0.0",
-  "description": "Chat en tiempo real estilo WhatsApp con Socket.IO y SQLite",
+  "description": "Chat en tiempo real estilo WhatsApp con Socket.IO y PostgreSQL",
   "main": "app.js",
   "license": "MIT",
   "scripts": {
